@@ -1,0 +1,2771 @@
+<channelGroup version="4.5.2">
+  <id>b52fef16-024b-4004-b520-5c065e2f7d75</id>
+  <name>Outlook Business</name>
+  <revision>2</revision>
+  <lastModified>
+    <time>1741635547919</time>
+    <timezone>America/Chicago</timezone>
+  </lastModified>
+  <description></description>
+  <channels>
+    <channel version="4.5.2">
+      <id>6a457f11-74d8-46e3-a24f-546ac889d654</id>
+      <nextMetaDataId>2</nextMetaDataId>
+      <name>outlook delete event</name>
+      <description></description>
+      <revision>18</revision>
+      <sourceConnector version="4.5.2">
+        <metaDataId>0</metaDataId>
+        <name>sourceConnector</name>
+        <properties class="com.mirth.connect.connectors.vm.VmReceiverProperties" version="4.5.2">
+          <pluginProperties/>
+          <sourceConnectorProperties version="4.5.2">
+            <responseVariable>None</responseVariable>
+            <respondAfterProcessing>true</respondAfterProcessing>
+            <processBatch>false</processBatch>
+            <firstResponse>false</firstResponse>
+            <processingThreads>1</processingThreads>
+            <resourceIds class="linked-hash-map">
+              <entry>
+                <string>Default Resource</string>
+                <string>[Default Resource]</string>
+              </entry>
+            </resourceIds>
+            <queueBufferSize>1000</queueBufferSize>
+          </sourceConnectorProperties>
+        </properties>
+        <transformer version="4.5.2">
+          <elements>
+            <com.mirth.connect.plugins.javascriptstep.JavaScriptStep version="4.5.2">
+              <sequenceNumber>0</sequenceNumber>
+              <enabled>true</enabled>
+              <script>/**********************************************
+## ⚠️ **DISCLAIMER – USE AT YOUR OWN RISK**
+🚨 **This software is provided &quot;as is&quot;, without warranty of any kind.**  
+📌 **You assume all risks related to using this code, including but not limited to data loss, security vulnerabilities, and unexpected behavior.**  
+📌 **This project does NOT guarantee HIPAA compliance or any legal protections.**  
+📌 **Test thoroughly before production and modify as needed.** 
+📌 This project is licensed under the [Server Side Public License (SSPL) v1.0](https://www.mongodb.com/licensing/server-side-public-license).
+
+**********************************************/
+
+/*** THIS NEEDS TO BE THE SAME ACROSS ALL SIU MESSAGES FOR THE UPDATE AND DELETE ***/
+
+var messageTrasnactionId = &quot;TransactionId:&quot; + msg[&apos;SCH&apos;][&apos;SCH.1&apos;][&apos;SCH.1.1&apos;].toString();
+
+var docEmailInOutlook = msg[&apos;NTE&apos;][&apos;NTE.3&apos;][&apos;NTE.3.1&apos;].toString().split(&quot;:&quot;)[1];
+channelMap.put(&quot;OUTLOOK_EMAIL_PROVIDER&quot;, docEmailInOutlook);
+
+
+channelMap.put(&quot;TRANSACTION_ID&quot;, messageTrasnactionId);</script>
+            </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+          </elements>
+          <inboundTemplate encoding="base64"></inboundTemplate>
+          <outboundTemplate encoding="base64"></outboundTemplate>
+          <inboundDataType>HL7V2</inboundDataType>
+          <outboundDataType>HL7V2</outboundDataType>
+          <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+            <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+              <handleRepetitions>true</handleRepetitions>
+              <handleSubcomponents>true</handleSubcomponents>
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <stripNamespaces>false</stripNamespaces>
+              <segmentDelimiter>\r</segmentDelimiter>
+              <convertLineBreaks>true</convertLineBreaks>
+            </serializationProperties>
+            <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <segmentDelimiter>\r</segmentDelimiter>
+            </deserializationProperties>
+            <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+              <splitType>MSH_Segment</splitType>
+              <batchScript></batchScript>
+            </batchProperties>
+            <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+              <segmentDelimiter>\r</segmentDelimiter>
+              <successfulACKCode>AA</successfulACKCode>
+              <successfulACKMessage></successfulACKMessage>
+              <errorACKCode>AE</errorACKCode>
+              <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+              <rejectedACKCode>AR</rejectedACKCode>
+              <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+              <msh15ACKAccept>false</msh15ACKAccept>
+              <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+            </responseGenerationProperties>
+            <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+              <successfulACKCode>AA,CA</successfulACKCode>
+              <errorACKCode>AE,CE</errorACKCode>
+              <rejectedACKCode>AR,CR</rejectedACKCode>
+              <validateMessageControlId>true</validateMessageControlId>
+              <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+              <originalIdMapVariable></originalIdMapVariable>
+            </responseValidationProperties>
+          </inboundProperties>
+          <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+            <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+              <handleRepetitions>true</handleRepetitions>
+              <handleSubcomponents>true</handleSubcomponents>
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <stripNamespaces>false</stripNamespaces>
+              <segmentDelimiter>\r</segmentDelimiter>
+              <convertLineBreaks>true</convertLineBreaks>
+            </serializationProperties>
+            <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <segmentDelimiter>\r</segmentDelimiter>
+            </deserializationProperties>
+            <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+              <splitType>MSH_Segment</splitType>
+              <batchScript></batchScript>
+            </batchProperties>
+            <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+              <segmentDelimiter>\r</segmentDelimiter>
+              <successfulACKCode>AA</successfulACKCode>
+              <successfulACKMessage></successfulACKMessage>
+              <errorACKCode>AE</errorACKCode>
+              <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+              <rejectedACKCode>AR</rejectedACKCode>
+              <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+              <msh15ACKAccept>false</msh15ACKAccept>
+              <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+            </responseGenerationProperties>
+            <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+              <successfulACKCode>AA,CA</successfulACKCode>
+              <errorACKCode>AE,CE</errorACKCode>
+              <rejectedACKCode>AR,CR</rejectedACKCode>
+              <validateMessageControlId>true</validateMessageControlId>
+              <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+              <originalIdMapVariable></originalIdMapVariable>
+            </responseValidationProperties>
+          </outboundProperties>
+        </transformer>
+        <filter version="4.5.2">
+          <elements/>
+        </filter>
+        <transportName>Channel Reader</transportName>
+        <mode>SOURCE</mode>
+        <enabled>true</enabled>
+        <waitForPrevious>true</waitForPrevious>
+      </sourceConnector>
+      <destinationConnectors>
+        <connector version="4.5.2">
+          <metaDataId>1</metaDataId>
+          <name>To Microsoft Graph</name>
+          <properties class="com.mirth.connect.connectors.js.JavaScriptDispatcherProperties" version="4.5.2">
+            <pluginProperties/>
+            <destinationConnectorProperties version="4.5.2">
+              <queueEnabled>false</queueEnabled>
+              <sendFirst>false</sendFirst>
+              <retryIntervalMillis>10000</retryIntervalMillis>
+              <regenerateTemplate>false</regenerateTemplate>
+              <retryCount>0</retryCount>
+              <rotate>false</rotate>
+              <includeFilterTransformer>false</includeFilterTransformer>
+              <threadCount>1</threadCount>
+              <threadAssignmentVariable></threadAssignmentVariable>
+              <validateResponse>false</validateResponse>
+              <resourceIds class="linked-hash-map">
+                <entry>
+                  <string>Default Resource</string>
+                  <string>[Default Resource]</string>
+                </entry>
+              </resourceIds>
+              <queueBufferSize>1000</queueBufferSize>
+              <reattachAttachments>true</reattachAttachments>
+            </destinationConnectorProperties>
+            <script>var eventId = &quot;&quot;;
+
+// 🔥 Replace with your actual values from Azure App Registration
+var clientId = configurationMap.get(&apos;office_client_id&apos;);
+var clientSecret = configurationMap.get(&apos;office_secret_value&apos;);  // 🔑 Created in Azure
+var tenantId = configurationMap.get(&apos;tennant&apos;);  // 🔹 Found in Azure Directory Info
+
+
+var accessToken = getMicrosoftAccessToken(clientId, clientSecret, tenantId);
+//logger.info(&quot;🔑 Access Token Retrieved: &quot; + accessToken);
+
+var userId = getMicrosoftUserId(accessToken, $(&apos;OUTLOOK_EMAIL_PROVIDER&apos;)); 
+
+/*** Lookup the event ***/
+
+var eventId = findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, $(&apos;TRANSACTION_ID&apos;));
+//logger.info(&quot;Find Event ID: &quot; + eventId);
+deleteMicrosoftCalendarEvent(accessToken, userId, eventId)</script>
+          </properties>
+          <transformer version="4.5.2">
+            <elements/>
+            <inboundDataType>HL7V2</inboundDataType>
+            <outboundDataType>HL7V2</outboundDataType>
+            <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </inboundProperties>
+            <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </outboundProperties>
+          </transformer>
+          <responseTransformer version="4.5.2">
+            <elements/>
+            <inboundDataType>HL7V2</inboundDataType>
+            <outboundDataType>HL7V2</outboundDataType>
+            <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </inboundProperties>
+            <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </outboundProperties>
+          </responseTransformer>
+          <filter version="4.5.2">
+            <elements/>
+          </filter>
+          <transportName>JavaScript Writer</transportName>
+          <mode>DESTINATION</mode>
+          <enabled>true</enabled>
+          <waitForPrevious>true</waitForPrevious>
+        </connector>
+      </destinationConnectors>
+      <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+      <postprocessingScript>// This script executes once after a message has been processed
+// Responses returned from here will be stored as &quot;Postprocessor&quot; in the response map
+return;</postprocessingScript>
+      <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+      <undeployScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</undeployScript>
+      <properties version="4.5.2">
+        <clearGlobalChannelMap>true</clearGlobalChannelMap>
+        <messageStorageMode>DEVELOPMENT</messageStorageMode>
+        <encryptData>false</encryptData>
+        <encryptAttachments>false</encryptAttachments>
+        <encryptCustomMetaData>false</encryptCustomMetaData>
+        <removeContentOnCompletion>false</removeContentOnCompletion>
+        <removeOnlyFilteredOnCompletion>false</removeOnlyFilteredOnCompletion>
+        <removeAttachmentsOnCompletion>false</removeAttachmentsOnCompletion>
+        <initialState>STARTED</initialState>
+        <storeAttachments>true</storeAttachments>
+        <metaDataColumns>
+          <metaDataColumn>
+            <name>SOURCE</name>
+            <type>STRING</type>
+            <mappingName>mirth_source</mappingName>
+          </metaDataColumn>
+          <metaDataColumn>
+            <name>TYPE</name>
+            <type>STRING</type>
+            <mappingName>mirth_type</mappingName>
+          </metaDataColumn>
+        </metaDataColumns>
+        <attachmentProperties version="4.5.2">
+          <type>None</type>
+          <properties/>
+        </attachmentProperties>
+        <resourceIds class="linked-hash-map">
+          <entry>
+            <string>Default Resource</string>
+            <string>[Default Resource]</string>
+          </entry>
+        </resourceIds>
+      </properties>
+      <exportData>
+        <metadata>
+          <enabled>true</enabled>
+          <lastModified>
+            <time>1741650498796</time>
+            <timezone>America/Chicago</timezone>
+          </lastModified>
+          <pruningSettings>
+            <archiveEnabled>true</archiveEnabled>
+            <pruneErroredMessages>false</pruneErroredMessages>
+          </pruningSettings>
+          <userId>1</userId>
+        </metadata>
+        <codeTemplateLibraries>
+          <codeTemplateLibrary version="4.5.2">
+            <id>86fefdf1-c61b-4567-a0aa-ee620ab853bc</id>
+            <name>Outlook</name>
+            <revision>12</revision>
+            <lastModified>
+              <time>1741643353791</time>
+              <timezone>America/Chicago</timezone>
+            </lastModified>
+            <description></description>
+            <includeNewChannels>false</includeNewChannels>
+            <enabledChannelIds>
+              <string>6a457f11-74d8-46e3-a24f-546ac889d654</string>
+              <string>c90c8324-aaee-417b-b975-af073b48a11d</string>
+              <string>a861e5b5-d528-41e6-abae-8ebdbcfc2e05</string>
+            </enabledChannelIds>
+            <disabledChannelIds>
+              <string>848ffa6d-b09f-41b3-9815-224bb3838446</string>
+              <string>62d31a3f-45a9-4fa4-afa3-16110eb6a948</string>
+              <string>248713d0-fae1-4260-8976-28015cf67f22</string>
+            </disabledChannelIds>
+            <codeTemplates>
+              <codeTemplate version="4.5.2">
+                <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
+                <name>createMicrosoftCalendarEvent</name>
+                <revision>4</revision>
+                <lastModified>
+                  <time>1741650440307</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg2 description
+	@param {String} event - arg3 description
+	
+	@return {String} return eventId
+*/
+function createMicrosoftCalendarEvent(accessToken, userId, event) {
+//	logger.info(&quot;In createEvent&quot;);
+//	logger.info(&quot;*****************************************************************************************************&quot;);
+    if (!accessToken || accessToken.trim() === &quot;&quot;) {
+        logger.error(&quot;❌ Access token is missing or empty!&quot;);
+        return null;
+    }
+
+    if (!userId) {
+        logger.error(&quot;❌ Cannot create event without a valid user ID.&quot;);
+        return null;
+    }
+
+    var calendarUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events&quot;;
+
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+    var StringEntity = Packages.org.apache.http.entity.StringEntity;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpPost = new HttpPost(calendarUrl);
+
+        // 🔹 Trim Access Token and Set Headers
+        var cleanToken = accessToken.trim();
+        httpPost.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + cleanToken);
+        httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+        httpPost.setEntity(new StringEntity(JSON.stringify(event), &quot;UTF-8&quot;));
+
+        // ✅ Log Debug Info Before Sending
+//        logger.info(&quot;📌 Sending Request to: &quot; + calendarUrl);
+//        logger.info(&quot;🔑 Authorization Header: Bearer &quot; + cleanToken);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(event, null, 2));
+
+        var response = httpClient.execute(httpPost);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+        
+//        logger.info(&quot;RESPONSE CREATE::&quot; + responseString);
+
+        if (responseJson.id) {
+            var eventId = responseJson.id;
+//            logger.info(&quot;✅ Event Created Successfully!&quot;);
+//            logger.info(&quot;🔹 Event ID: &quot; + eventId);
+//            logger.info(&quot;🔹 Web Link: &quot; + responseJson.webLink);
+            return eventId;
+        } else {
+            logger.error(&quot;❌ Error: Event ID not found.&quot;);
+            logger.error(&quot;🔍 Full Response: &quot; + responseString);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
+                <name>deleteMicrosoftCalendarEvent</name>
+                <revision>4</revision>
+                <lastModified>
+                  <time>1741650440313</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - accessToken description
+	@param {String} userId - userId description
+	@param {String} eventId - eventId description
+	
+	@return {String} return description
+*/
+function deleteMicrosoftCalendarEvent(accessToken, userId, eventId) {
+    if (!accessToken || !userId || !eventId) {
+        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
+        return;
+    }
+
+    var deleteUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpDelete = Packages.org.apache.http.client.methods.HttpDelete;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpDelete = new HttpDelete(deleteUrl);
+
+        httpDelete.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
+        httpDelete.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+//        logger.info(&quot;📌 Sending DELETE request to: &quot; + deleteUrl);
+
+        var response = httpClient.execute(httpDelete);
+        var statusCode = response.getStatusLine().getStatusCode();
+
+        if (statusCode === 204) {
+            logger.info(&quot;✅ Event Deleted Successfully!&quot;);
+        } else {
+            var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+            logger.error(&quot;❌ Error Deleting Event: &quot; + responseString);
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while deleting: &quot; + e);
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
+                <name>findMicrosfotCalendarEventByCustomTransactionId</name>
+                <revision>5</revision>
+                <lastModified>
+                  <time>1741650440317</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg1 description
+	@param {String} transactionId - arg1 description
+	
+	@return {String} return description
+*/
+function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, transactionId) {
+
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+	
+    var filterQuery = &quot;categories/any(a:a eq &apos;&quot; + transactionId + &quot;&apos;)&quot;;
+    var encodedFilterQuery = encodeURIComponent(filterQuery); // Encode the whole filter query
+
+    var searchUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; 
+        + encodeURIComponent(userId) 
+        + &quot;/events?$filter=&quot; + encodedFilterQuery; // ✅ Use encoded filter
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpGet = Packages.org.apache.http.client.methods.HttpGet;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpGet = new HttpGet(searchUrl);
+        httpGet.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken);
+        httpGet.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+        var response = httpClient.execute(httpGet);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+
+        // 🔍 Log the full response for debugging
+//        logger.info(&quot;🔍 FULL RESPONSE: &quot; + responseString);
+
+        if (responseJson.value &amp;&amp; responseJson.value.length &gt; 0) {
+            var eventId = responseJson.value[0].id;
+//            logger.info(&quot;✅ Event Found! ID: &quot; + eventId);
+            return eventId;
+        } else {
+            logger.error(&quot;❌ No matching event found.&quot;);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while retrieving Event ID: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
+                <name>getMicrosoftAccessToken</name>
+                <revision>8</revision>
+                <lastModified>
+                  <time>1741642270815</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} clientId - arg1 description
+	@param {String} clientId - arg1 description
+	@param {String} clientId - arg1 description
+	
+	@return {String} return access token for oauth2
+*/
+
+function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
+
+	var scope = &quot;https://graph.microsoft.com/.default&quot;;  // 🔹 Graph API scope
+
+	// Microsoft OAuth 2.0 Token URL
+	var tokenUrl = &quot;https://login.microsoftonline.com/&quot; + tenantId + &quot;/oauth2/v2.0/token&quot;; 
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+	
+	try {
+	   var httpClient = HttpClients.createDefault();
+	   var httpPost = new HttpPost(tokenUrl);
+	   httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded&quot;);
+	
+	   // 🔥 Request body for client credentials grant
+	   var postData = &quot;client_id=&quot; + encodeURIComponent(clientId) +
+	                  &quot;&amp;client_secret=&quot; + encodeURIComponent(clientSecret) +
+	                  &quot;&amp;scope=&quot; + encodeURIComponent(scope) +
+	                  &quot;&amp;grant_type=client_credentials&quot;;
+	
+	   httpPost.setEntity(new StringEntity(postData, &quot;UTF-8&quot;));
+	
+	   var response = httpClient.execute(httpPost);
+	   var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+	   var responseJson = JSON.parse(responseString);
+//	   logger.info(&quot;response: &quot; + responseString);
+	   if (responseJson.access_token) {
+//	       logger.info(&quot;✅ Access Token Received: &quot; + responseJson.access_token);
+	       return responseJson.access_token;
+	   } else {
+	       logger.error(&quot;❌ Error getting access token: &quot; + responseString);
+	       return null;
+	   }
+	} catch (e) {
+	   logger.error(&quot;❌ Exception: &quot; + e);
+	   return null;
+	}
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>e690620f-688c-46d8-adc0-85da23af2119</id>
+                <name>getMicrosoftUserId</name>
+                <revision>3</revision>
+                <lastModified>
+                  <time>1741639012305</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} arg1 - arg1 description
+	@return {String} return description
+*/
+function getMicrosoftUserId(accessToken, userEmail) {
+
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+	
+    var URLEncoder = Packages.java.net.URLEncoder;
+    var charset = &quot;UTF-8&quot;;
+
+    // 🔹 Correctly encode the query parameter
+    var encodedFilter = URLEncoder.encode(&quot;mail eq &apos;&quot; + userEmail + &quot;&apos;&quot;, charset);
+    var userLookupUrl = &quot;https://graph.microsoft.com/v1.0/users?$filter=&quot; + encodedFilter;
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpGet = Packages.org.apache.http.client.methods.HttpGet;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpGet = new HttpGet(userLookupUrl);
+        httpGet.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken);
+        httpGet.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+        var response = httpClient.execute(httpGet);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+
+        // 🔹 Check if the user exists in the response
+        if (responseJson.value &amp;&amp; responseJson.value.length &gt; 0) {
+            var userId = responseJson.value[0].id;
+//            logger.info(&quot;✅ User ID Retrieved: &quot; + userId);
+            return userId;
+        } else {
+            logger.error(&quot;❌ User not found in directory: &quot; + responseString);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while getting User ID: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
+                <name>updateMicrosoftCalendarEvent</name>
+                <revision>5</revision>
+                <lastModified>
+                  <time>1741650440324</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg1 description
+	@param {String} eventId - arg1 description
+	@param {String} updatedEventData - arg1 description
+	
+	@return {String} return description
+*/
+function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEventData) {
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+	
+    if (!accessToken || !userId || !eventId) {
+        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
+        return;
+    }
+
+    var updateUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpPatch = Packages.org.apache.http.client.methods.HttpPatch;
+    var StringEntity = Packages.org.apache.http.entity.StringEntity;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpPatch = new HttpPatch(updateUrl);
+
+        httpPatch.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
+        httpPatch.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+        httpPatch.setEntity(new StringEntity(JSON.stringify(updatedEventData), &quot;UTF-8&quot;));
+
+//        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
+
+        var response = httpClient.execute(httpPatch);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+
+        if (response.getStatusLine().getStatusCode() === 200) {
+            logger.info(&quot;✅ Event Updated Successfully!&quot;);
+        } else {
+            logger.error(&quot;❌ Error Updating Event: &quot; + responseString);
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while updating: &quot; + e);
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+            </codeTemplates>
+          </codeTemplateLibrary>
+        </codeTemplateLibraries>
+      </exportData>
+    </channel>
+    <channel version="4.5.2">
+      <id>c90c8324-aaee-417b-b975-af073b48a11d</id>
+      <nextMetaDataId>2</nextMetaDataId>
+      <name>outlook update event</name>
+      <description></description>
+      <revision>23</revision>
+      <sourceConnector version="4.5.2">
+        <metaDataId>0</metaDataId>
+        <name>sourceConnector</name>
+        <properties class="com.mirth.connect.connectors.vm.VmReceiverProperties" version="4.5.2">
+          <pluginProperties/>
+          <sourceConnectorProperties version="4.5.2">
+            <responseVariable>Auto-generate (Before processing)</responseVariable>
+            <respondAfterProcessing>true</respondAfterProcessing>
+            <processBatch>false</processBatch>
+            <firstResponse>false</firstResponse>
+            <processingThreads>1</processingThreads>
+            <resourceIds class="linked-hash-map">
+              <entry>
+                <string>Default Resource</string>
+                <string>[Default Resource]</string>
+              </entry>
+            </resourceIds>
+            <queueBufferSize>1000</queueBufferSize>
+          </sourceConnectorProperties>
+        </properties>
+        <transformer version="4.5.2">
+          <elements>
+            <com.mirth.connect.plugins.javascriptstep.JavaScriptStep version="4.5.2">
+              <sequenceNumber>0</sequenceNumber>
+              <enabled>true</enabled>
+              <script>/**********************************************
+## ⚠️ **DISCLAIMER – USE AT YOUR OWN RISK**
+🚨 **This software is provided &quot;as is&quot;, without warranty of any kind.**  
+📌 **You assume all risks related to using this code, including but not limited to data loss, security vulnerabilities, and unexpected behavior.**  
+📌 **This project does NOT guarantee HIPAA compliance or any legal protections.**  
+📌 **Test thoroughly before production and modify as needed.** 
+📌 This project is licensed under the [Server Side Public License (SSPL) v1.0](https://www.mongodb.com/licensing/server-side-public-license).
+
+**********************************************/
+
+/*** THIS NEEDS TO BE THE SAME ACROSS ALL SIU MESSAGES FOR THE UPDATE AND DELETE ***/
+
+var messageTrasnactionId = &quot;TransactionId:&quot; + msg[&apos;SCH&apos;][&apos;SCH.1&apos;][&apos;SCH.1.1&apos;].toString();
+
+/*** OTHER INFO *****/
+var patientEmail = msg[&apos;PID&apos;][&apos;PID.14&apos;][&apos;PID.14.1&apos;].toString();
+var patientName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString() + &quot; &quot; + msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString();
+var calenderSubject =  msg[&apos;SCH&apos;][&apos;SCH.6&apos;][&apos;SCH.6.1&apos;].toString();
+
+/*** YES I AM CHEATING AND HARDCODING THESE VALUES ****/
+var startDate = &quot;2025-03-10T15:00:00&quot;;
+var endDate = &quot;2025-03-10T16:00:00&quot;;
+var visitReason = &quot;This event was updated via Mirth Connect!&quot;;
+
+/**** CREATE EVENT ****/
+var updatedEventData = {
+   subject: calenderSubject,
+   start: { dateTime: startDate, timeZone: &quot;UTC&quot; },
+   end: { dateTime: endDate, timeZone: &quot;UTC&quot; },
+   attendees: [{ emailAddress: { address: patientEmail, name: patientName }, type: &quot;required&quot; }],
+   body: { content: visitReason, contentType: &quot;text&quot; },
+   categories: [
+     messageTrasnactionId
+  ]
+};
+
+
+
+var docEmailInOutlook = msg[&apos;NTE&apos;][&apos;NTE.3&apos;][&apos;NTE.3.1&apos;].toString().split(&quot;:&quot;)[1];
+channelMap.put(&quot;OUTLOOK_EMAIL_PROVIDER&quot;, docEmailInOutlook);
+channelMap.put(&quot;TRANSACTION_ID&quot;, messageTrasnactionId);
+channelMap.put(&quot;EVENT&quot;, updatedEventData);</script>
+            </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+          </elements>
+          <inboundTemplate encoding="base64"></inboundTemplate>
+          <outboundTemplate encoding="base64"></outboundTemplate>
+          <inboundDataType>HL7V2</inboundDataType>
+          <outboundDataType>HL7V2</outboundDataType>
+          <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+            <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+              <handleRepetitions>true</handleRepetitions>
+              <handleSubcomponents>true</handleSubcomponents>
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <stripNamespaces>false</stripNamespaces>
+              <segmentDelimiter>\r</segmentDelimiter>
+              <convertLineBreaks>true</convertLineBreaks>
+            </serializationProperties>
+            <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <segmentDelimiter>\r</segmentDelimiter>
+            </deserializationProperties>
+            <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+              <splitType>MSH_Segment</splitType>
+              <batchScript></batchScript>
+            </batchProperties>
+            <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+              <segmentDelimiter>\r</segmentDelimiter>
+              <successfulACKCode>AA</successfulACKCode>
+              <successfulACKMessage></successfulACKMessage>
+              <errorACKCode>AE</errorACKCode>
+              <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+              <rejectedACKCode>AR</rejectedACKCode>
+              <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+              <msh15ACKAccept>false</msh15ACKAccept>
+              <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+            </responseGenerationProperties>
+            <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+              <successfulACKCode>AA,CA</successfulACKCode>
+              <errorACKCode>AE,CE</errorACKCode>
+              <rejectedACKCode>AR,CR</rejectedACKCode>
+              <validateMessageControlId>true</validateMessageControlId>
+              <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+              <originalIdMapVariable></originalIdMapVariable>
+            </responseValidationProperties>
+          </inboundProperties>
+          <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+            <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+              <handleRepetitions>true</handleRepetitions>
+              <handleSubcomponents>true</handleSubcomponents>
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <stripNamespaces>false</stripNamespaces>
+              <segmentDelimiter>\r</segmentDelimiter>
+              <convertLineBreaks>true</convertLineBreaks>
+            </serializationProperties>
+            <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <segmentDelimiter>\r</segmentDelimiter>
+            </deserializationProperties>
+            <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+              <splitType>MSH_Segment</splitType>
+              <batchScript></batchScript>
+            </batchProperties>
+            <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+              <segmentDelimiter>\r</segmentDelimiter>
+              <successfulACKCode>AA</successfulACKCode>
+              <successfulACKMessage></successfulACKMessage>
+              <errorACKCode>AE</errorACKCode>
+              <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+              <rejectedACKCode>AR</rejectedACKCode>
+              <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+              <msh15ACKAccept>false</msh15ACKAccept>
+              <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+            </responseGenerationProperties>
+            <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+              <successfulACKCode>AA,CA</successfulACKCode>
+              <errorACKCode>AE,CE</errorACKCode>
+              <rejectedACKCode>AR,CR</rejectedACKCode>
+              <validateMessageControlId>true</validateMessageControlId>
+              <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+              <originalIdMapVariable></originalIdMapVariable>
+            </responseValidationProperties>
+          </outboundProperties>
+        </transformer>
+        <filter version="4.5.2">
+          <elements/>
+        </filter>
+        <transportName>Channel Reader</transportName>
+        <mode>SOURCE</mode>
+        <enabled>true</enabled>
+        <waitForPrevious>true</waitForPrevious>
+      </sourceConnector>
+      <destinationConnectors>
+        <connector version="4.5.2">
+          <metaDataId>1</metaDataId>
+          <name>To Microsoft</name>
+          <properties class="com.mirth.connect.connectors.js.JavaScriptDispatcherProperties" version="4.5.2">
+            <pluginProperties/>
+            <destinationConnectorProperties version="4.5.2">
+              <queueEnabled>false</queueEnabled>
+              <sendFirst>false</sendFirst>
+              <retryIntervalMillis>10000</retryIntervalMillis>
+              <regenerateTemplate>false</regenerateTemplate>
+              <retryCount>0</retryCount>
+              <rotate>false</rotate>
+              <includeFilterTransformer>false</includeFilterTransformer>
+              <threadCount>1</threadCount>
+              <threadAssignmentVariable></threadAssignmentVariable>
+              <validateResponse>false</validateResponse>
+              <resourceIds class="linked-hash-map">
+                <entry>
+                  <string>Default Resource</string>
+                  <string>[Default Resource]</string>
+                </entry>
+              </resourceIds>
+              <queueBufferSize>1000</queueBufferSize>
+              <reattachAttachments>true</reattachAttachments>
+            </destinationConnectorProperties>
+            <script>var eventId = &quot;&quot;;
+
+// 🔥 Replace with your actual values from Azure App Registration
+var clientId = configurationMap.get(&apos;office_client_id&apos;);
+var clientSecret = configurationMap.get(&apos;office_secret_value&apos;);  // 🔑 Created in Azure
+var tenantId = configurationMap.get(&apos;tennant&apos;);  // 🔹 Found in Azure Directory Info
+
+
+var accessToken = getMicrosoftAccessToken(clientId, clientSecret, tenantId);
+
+var userId = getMicrosoftUserId(accessToken, $(&apos;OUTLOOK_EMAIL_PROVIDER&apos;)); 
+
+/*** Lookup the event ***/
+
+var eventId = findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, $(&apos;TRANSACTION_ID&apos;));
+//logger.info(&quot;Find Event ID: &quot; + eventId);
+
+updateMicrosoftCalendarEvent(accessToken, userId, eventId, $(&apos;EVENT&apos;));</script>
+          </properties>
+          <transformer version="4.5.2">
+            <elements/>
+            <inboundDataType>HL7V2</inboundDataType>
+            <outboundDataType>HL7V2</outboundDataType>
+            <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </inboundProperties>
+            <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </outboundProperties>
+          </transformer>
+          <responseTransformer version="4.5.2">
+            <elements/>
+            <inboundDataType>HL7V2</inboundDataType>
+            <outboundDataType>HL7V2</outboundDataType>
+            <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </inboundProperties>
+            <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </outboundProperties>
+          </responseTransformer>
+          <filter version="4.5.2">
+            <elements/>
+          </filter>
+          <transportName>JavaScript Writer</transportName>
+          <mode>DESTINATION</mode>
+          <enabled>true</enabled>
+          <waitForPrevious>true</waitForPrevious>
+        </connector>
+      </destinationConnectors>
+      <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+      <postprocessingScript>// This script executes once after a message has been processed
+// Responses returned from here will be stored as &quot;Postprocessor&quot; in the response map
+return;</postprocessingScript>
+      <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+      <undeployScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</undeployScript>
+      <properties version="4.5.2">
+        <clearGlobalChannelMap>true</clearGlobalChannelMap>
+        <messageStorageMode>DEVELOPMENT</messageStorageMode>
+        <encryptData>false</encryptData>
+        <encryptAttachments>false</encryptAttachments>
+        <encryptCustomMetaData>false</encryptCustomMetaData>
+        <removeContentOnCompletion>false</removeContentOnCompletion>
+        <removeOnlyFilteredOnCompletion>false</removeOnlyFilteredOnCompletion>
+        <removeAttachmentsOnCompletion>false</removeAttachmentsOnCompletion>
+        <initialState>STARTED</initialState>
+        <storeAttachments>true</storeAttachments>
+        <metaDataColumns>
+          <metaDataColumn>
+            <name>SOURCE</name>
+            <type>STRING</type>
+            <mappingName>mirth_source</mappingName>
+          </metaDataColumn>
+          <metaDataColumn>
+            <name>TYPE</name>
+            <type>STRING</type>
+            <mappingName>mirth_type</mappingName>
+          </metaDataColumn>
+        </metaDataColumns>
+        <attachmentProperties version="4.5.2">
+          <type>None</type>
+          <properties/>
+        </attachmentProperties>
+        <resourceIds class="linked-hash-map">
+          <entry>
+            <string>Default Resource</string>
+            <string>[Default Resource]</string>
+          </entry>
+        </resourceIds>
+      </properties>
+      <exportData>
+        <metadata>
+          <enabled>true</enabled>
+          <lastModified>
+            <time>1741650481629</time>
+            <timezone>America/Chicago</timezone>
+          </lastModified>
+          <pruningSettings>
+            <archiveEnabled>true</archiveEnabled>
+            <pruneErroredMessages>false</pruneErroredMessages>
+          </pruningSettings>
+          <userId>1</userId>
+        </metadata>
+        <codeTemplateLibraries>
+          <codeTemplateLibrary version="4.5.2">
+            <id>86fefdf1-c61b-4567-a0aa-ee620ab853bc</id>
+            <name>Outlook</name>
+            <revision>12</revision>
+            <lastModified>
+              <time>1741643353791</time>
+              <timezone>America/Chicago</timezone>
+            </lastModified>
+            <description></description>
+            <includeNewChannels>false</includeNewChannels>
+            <enabledChannelIds>
+              <string>6a457f11-74d8-46e3-a24f-546ac889d654</string>
+              <string>c90c8324-aaee-417b-b975-af073b48a11d</string>
+              <string>a861e5b5-d528-41e6-abae-8ebdbcfc2e05</string>
+            </enabledChannelIds>
+            <disabledChannelIds>
+              <string>848ffa6d-b09f-41b3-9815-224bb3838446</string>
+              <string>62d31a3f-45a9-4fa4-afa3-16110eb6a948</string>
+              <string>248713d0-fae1-4260-8976-28015cf67f22</string>
+            </disabledChannelIds>
+            <codeTemplates>
+              <codeTemplate version="4.5.2">
+                <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
+                <name>createMicrosoftCalendarEvent</name>
+                <revision>4</revision>
+                <lastModified>
+                  <time>1741650440307</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg2 description
+	@param {String} event - arg3 description
+	
+	@return {String} return eventId
+*/
+function createMicrosoftCalendarEvent(accessToken, userId, event) {
+//	logger.info(&quot;In createEvent&quot;);
+//	logger.info(&quot;*****************************************************************************************************&quot;);
+    if (!accessToken || accessToken.trim() === &quot;&quot;) {
+        logger.error(&quot;❌ Access token is missing or empty!&quot;);
+        return null;
+    }
+
+    if (!userId) {
+        logger.error(&quot;❌ Cannot create event without a valid user ID.&quot;);
+        return null;
+    }
+
+    var calendarUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events&quot;;
+
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+    var StringEntity = Packages.org.apache.http.entity.StringEntity;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpPost = new HttpPost(calendarUrl);
+
+        // 🔹 Trim Access Token and Set Headers
+        var cleanToken = accessToken.trim();
+        httpPost.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + cleanToken);
+        httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+        httpPost.setEntity(new StringEntity(JSON.stringify(event), &quot;UTF-8&quot;));
+
+        // ✅ Log Debug Info Before Sending
+//        logger.info(&quot;📌 Sending Request to: &quot; + calendarUrl);
+//        logger.info(&quot;🔑 Authorization Header: Bearer &quot; + cleanToken);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(event, null, 2));
+
+        var response = httpClient.execute(httpPost);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+        
+//        logger.info(&quot;RESPONSE CREATE::&quot; + responseString);
+
+        if (responseJson.id) {
+            var eventId = responseJson.id;
+//            logger.info(&quot;✅ Event Created Successfully!&quot;);
+//            logger.info(&quot;🔹 Event ID: &quot; + eventId);
+//            logger.info(&quot;🔹 Web Link: &quot; + responseJson.webLink);
+            return eventId;
+        } else {
+            logger.error(&quot;❌ Error: Event ID not found.&quot;);
+            logger.error(&quot;🔍 Full Response: &quot; + responseString);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
+                <name>deleteMicrosoftCalendarEvent</name>
+                <revision>4</revision>
+                <lastModified>
+                  <time>1741650440313</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - accessToken description
+	@param {String} userId - userId description
+	@param {String} eventId - eventId description
+	
+	@return {String} return description
+*/
+function deleteMicrosoftCalendarEvent(accessToken, userId, eventId) {
+    if (!accessToken || !userId || !eventId) {
+        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
+        return;
+    }
+
+    var deleteUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpDelete = Packages.org.apache.http.client.methods.HttpDelete;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpDelete = new HttpDelete(deleteUrl);
+
+        httpDelete.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
+        httpDelete.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+//        logger.info(&quot;📌 Sending DELETE request to: &quot; + deleteUrl);
+
+        var response = httpClient.execute(httpDelete);
+        var statusCode = response.getStatusLine().getStatusCode();
+
+        if (statusCode === 204) {
+            logger.info(&quot;✅ Event Deleted Successfully!&quot;);
+        } else {
+            var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+            logger.error(&quot;❌ Error Deleting Event: &quot; + responseString);
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while deleting: &quot; + e);
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
+                <name>findMicrosfotCalendarEventByCustomTransactionId</name>
+                <revision>5</revision>
+                <lastModified>
+                  <time>1741650440317</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg1 description
+	@param {String} transactionId - arg1 description
+	
+	@return {String} return description
+*/
+function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, transactionId) {
+
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+	
+    var filterQuery = &quot;categories/any(a:a eq &apos;&quot; + transactionId + &quot;&apos;)&quot;;
+    var encodedFilterQuery = encodeURIComponent(filterQuery); // Encode the whole filter query
+
+    var searchUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; 
+        + encodeURIComponent(userId) 
+        + &quot;/events?$filter=&quot; + encodedFilterQuery; // ✅ Use encoded filter
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpGet = Packages.org.apache.http.client.methods.HttpGet;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpGet = new HttpGet(searchUrl);
+        httpGet.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken);
+        httpGet.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+        var response = httpClient.execute(httpGet);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+
+        // 🔍 Log the full response for debugging
+//        logger.info(&quot;🔍 FULL RESPONSE: &quot; + responseString);
+
+        if (responseJson.value &amp;&amp; responseJson.value.length &gt; 0) {
+            var eventId = responseJson.value[0].id;
+//            logger.info(&quot;✅ Event Found! ID: &quot; + eventId);
+            return eventId;
+        } else {
+            logger.error(&quot;❌ No matching event found.&quot;);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while retrieving Event ID: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
+                <name>getMicrosoftAccessToken</name>
+                <revision>8</revision>
+                <lastModified>
+                  <time>1741642270815</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} clientId - arg1 description
+	@param {String} clientId - arg1 description
+	@param {String} clientId - arg1 description
+	
+	@return {String} return access token for oauth2
+*/
+
+function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
+
+	var scope = &quot;https://graph.microsoft.com/.default&quot;;  // 🔹 Graph API scope
+
+	// Microsoft OAuth 2.0 Token URL
+	var tokenUrl = &quot;https://login.microsoftonline.com/&quot; + tenantId + &quot;/oauth2/v2.0/token&quot;; 
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+	
+	try {
+	   var httpClient = HttpClients.createDefault();
+	   var httpPost = new HttpPost(tokenUrl);
+	   httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded&quot;);
+	
+	   // 🔥 Request body for client credentials grant
+	   var postData = &quot;client_id=&quot; + encodeURIComponent(clientId) +
+	                  &quot;&amp;client_secret=&quot; + encodeURIComponent(clientSecret) +
+	                  &quot;&amp;scope=&quot; + encodeURIComponent(scope) +
+	                  &quot;&amp;grant_type=client_credentials&quot;;
+	
+	   httpPost.setEntity(new StringEntity(postData, &quot;UTF-8&quot;));
+	
+	   var response = httpClient.execute(httpPost);
+	   var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+	   var responseJson = JSON.parse(responseString);
+//	   logger.info(&quot;response: &quot; + responseString);
+	   if (responseJson.access_token) {
+//	       logger.info(&quot;✅ Access Token Received: &quot; + responseJson.access_token);
+	       return responseJson.access_token;
+	   } else {
+	       logger.error(&quot;❌ Error getting access token: &quot; + responseString);
+	       return null;
+	   }
+	} catch (e) {
+	   logger.error(&quot;❌ Exception: &quot; + e);
+	   return null;
+	}
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>e690620f-688c-46d8-adc0-85da23af2119</id>
+                <name>getMicrosoftUserId</name>
+                <revision>3</revision>
+                <lastModified>
+                  <time>1741639012305</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} arg1 - arg1 description
+	@return {String} return description
+*/
+function getMicrosoftUserId(accessToken, userEmail) {
+
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+	
+    var URLEncoder = Packages.java.net.URLEncoder;
+    var charset = &quot;UTF-8&quot;;
+
+    // 🔹 Correctly encode the query parameter
+    var encodedFilter = URLEncoder.encode(&quot;mail eq &apos;&quot; + userEmail + &quot;&apos;&quot;, charset);
+    var userLookupUrl = &quot;https://graph.microsoft.com/v1.0/users?$filter=&quot; + encodedFilter;
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpGet = Packages.org.apache.http.client.methods.HttpGet;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpGet = new HttpGet(userLookupUrl);
+        httpGet.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken);
+        httpGet.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+        var response = httpClient.execute(httpGet);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+
+        // 🔹 Check if the user exists in the response
+        if (responseJson.value &amp;&amp; responseJson.value.length &gt; 0) {
+            var userId = responseJson.value[0].id;
+//            logger.info(&quot;✅ User ID Retrieved: &quot; + userId);
+            return userId;
+        } else {
+            logger.error(&quot;❌ User not found in directory: &quot; + responseString);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while getting User ID: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
+                <name>updateMicrosoftCalendarEvent</name>
+                <revision>5</revision>
+                <lastModified>
+                  <time>1741650440324</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg1 description
+	@param {String} eventId - arg1 description
+	@param {String} updatedEventData - arg1 description
+	
+	@return {String} return description
+*/
+function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEventData) {
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+	
+    if (!accessToken || !userId || !eventId) {
+        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
+        return;
+    }
+
+    var updateUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpPatch = Packages.org.apache.http.client.methods.HttpPatch;
+    var StringEntity = Packages.org.apache.http.entity.StringEntity;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpPatch = new HttpPatch(updateUrl);
+
+        httpPatch.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
+        httpPatch.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+        httpPatch.setEntity(new StringEntity(JSON.stringify(updatedEventData), &quot;UTF-8&quot;));
+
+//        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
+
+        var response = httpClient.execute(httpPatch);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+
+        if (response.getStatusLine().getStatusCode() === 200) {
+            logger.info(&quot;✅ Event Updated Successfully!&quot;);
+        } else {
+            logger.error(&quot;❌ Error Updating Event: &quot; + responseString);
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while updating: &quot; + e);
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+            </codeTemplates>
+          </codeTemplateLibrary>
+        </codeTemplateLibraries>
+      </exportData>
+    </channel>
+    <channel version="4.5.2">
+      <id>a861e5b5-d528-41e6-abae-8ebdbcfc2e05</id>
+      <nextMetaDataId>2</nextMetaDataId>
+      <name>outlook create event</name>
+      <description></description>
+      <revision>217</revision>
+      <sourceConnector version="4.5.2">
+        <metaDataId>0</metaDataId>
+        <name>sourceConnector</name>
+        <properties class="com.mirth.connect.connectors.vm.VmReceiverProperties" version="4.5.2">
+          <pluginProperties/>
+          <sourceConnectorProperties version="4.5.2">
+            <responseVariable>Auto-generate (Before processing)</responseVariable>
+            <respondAfterProcessing>true</respondAfterProcessing>
+            <processBatch>false</processBatch>
+            <firstResponse>false</firstResponse>
+            <processingThreads>1</processingThreads>
+            <resourceIds class="linked-hash-map">
+              <entry>
+                <string>Default Resource</string>
+                <string>[Default Resource]</string>
+              </entry>
+            </resourceIds>
+            <queueBufferSize>1000</queueBufferSize>
+          </sourceConnectorProperties>
+        </properties>
+        <transformer version="4.5.2">
+          <elements>
+            <com.mirth.connect.plugins.javascriptstep.JavaScriptStep version="4.5.2">
+              <sequenceNumber>0</sequenceNumber>
+              <enabled>true</enabled>
+              <script>/**********************************************
+## ⚠️ **DISCLAIMER – USE AT YOUR OWN RISK**
+🚨 **This software is provided &quot;as is&quot;, without warranty of any kind.**  
+📌 **You assume all risks related to using this code, including but not limited to data loss, security vulnerabilities, and unexpected behavior.**  
+📌 **This project does NOT guarantee HIPAA compliance or any legal protections.**  
+📌 **Test thoroughly before production and modify as needed.** 
+📌 This project is licensed under the [Server Side Public License (SSPL) v1.0](https://www.mongodb.com/licensing/server-side-public-license).
+
+**********************************************/
+
+/*** THIS NEEDS TO BE THE SAME ACROSS ALL SIU MESSAGES FOR THE UPDATE AND DELETE ***/
+
+var messageTrasnactionId = &quot;TransactionId:&quot; + msg[&apos;SCH&apos;][&apos;SCH.1&apos;][&apos;SCH.1.1&apos;].toString();
+
+/*** OTHER INFO *****/
+var patientEmail = msg[&apos;PID&apos;][&apos;PID.14&apos;][&apos;PID.14.1&apos;].toString();
+var patientName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString() + &quot; &quot; + msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString();
+var calenderSubject =  msg[&apos;SCH&apos;][&apos;SCH.6&apos;][&apos;SCH.6.1&apos;].toString();
+
+/*** YES I AM CHEATING AND HARDCODING THESE VALUES ****/
+var startDate = &quot;2025-03-10T14:00:00&quot;;
+var endDate = &quot;2025-03-10T15:00:00&quot;;
+var visitReason = &quot;Some ingformation here&quot;;
+
+/**** CREATE EVENT ****/
+var event = {
+   subject: calenderSubject,
+   start: { dateTime: startDate, timeZone: &quot;UTC&quot; },
+   end: { dateTime: endDate, timeZone: &quot;UTC&quot; },
+   attendees: [{ emailAddress: { address: patientEmail, name: patientName }, type: &quot;required&quot; }],
+   body: { content: visitReason, contentType: &quot;text&quot; },
+   categories: [
+     messageTrasnactionId
+  ]
+};
+
+
+
+var docEmailInOutlook = msg[&apos;NTE&apos;][&apos;NTE.3&apos;][&apos;NTE.3.1&apos;].toString().split(&quot;:&quot;)[1];
+channelMap.put(&quot;OUTLOOK_EMAIL_PROVIDER&quot;, docEmailInOutlook);
+channelMap.put(&quot;TRANSACTION_ID&quot;, messageTrasnactionId);
+channelMap.put(&quot;EVENT&quot;, event);</script>
+            </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+          </elements>
+          <inboundTemplate encoding="base64">TVNIfF5+XCZ8TUlSVEh8U0NIRURVTEVSfEhPU1BJVEFMfEhJU3wyMDI1MDMxMDEyMDAwMHx8U0lVXlMxMnxFWEMtNDNFUi0zMkVHRVJHfFB8Mi41LjEKU0NIfDEyMzQ1NnxFWEMtNDNFUi0zMkVHRVJHfHx8fE1lZXRpbmcgd2l0aCBUZWFtIDJ8fHwyMDI1MDMxMDE0MDAwMHwyMDI1MDMxMDE1MDAwMHw2MHxNSU58Q29uZmlybWVkfHx8fHwKUElEfDF8fDEyMzQ1Nl5eXkhPU1BJVEFMXk1SfHxEb2VeSm9obnx8MTk4MDAxMDF8TXx8fDEyMyBNYWluIFN0Xl5OZXcgWW9ya15OWV4xMDAwMXx8NTU1LTEyMzR8am9obi5kb2VAZXhhbXBsZS5jb218fHx8ClBWMXwxfE98Q2xpbmljIDF8fHx8MTIzNDVeU21pdGheSmFuZV5eXl5NRHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fDIwMjUwMzEwMTIwMDAwClJHU3wxfDEyMzQ1NgpBSVN8MXx8MjAyNTAzMTAxNDAwMDB8NjB8TUlOfHx8RG9lXkpvaG4KQUlHfDF8fDEyMzQ1XlNtaXRoXkphbmVeXl5eTUR8fHx8fHx8fApOVEV8MXx8RG9jdG9yIEVtYWlsOiBqYW5lLnNtaXRoQGhvc3BpdGFsLmNvbQo=</inboundTemplate>
+          <outboundTemplate encoding="base64"></outboundTemplate>
+          <inboundDataType>HL7V2</inboundDataType>
+          <outboundDataType>HL7V2</outboundDataType>
+          <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+            <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+              <handleRepetitions>true</handleRepetitions>
+              <handleSubcomponents>true</handleSubcomponents>
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <stripNamespaces>false</stripNamespaces>
+              <segmentDelimiter>\r</segmentDelimiter>
+              <convertLineBreaks>true</convertLineBreaks>
+            </serializationProperties>
+            <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <segmentDelimiter>\r</segmentDelimiter>
+            </deserializationProperties>
+            <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+              <splitType>MSH_Segment</splitType>
+              <batchScript></batchScript>
+            </batchProperties>
+            <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+              <segmentDelimiter>\r</segmentDelimiter>
+              <successfulACKCode>AA</successfulACKCode>
+              <successfulACKMessage></successfulACKMessage>
+              <errorACKCode>AE</errorACKCode>
+              <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+              <rejectedACKCode>AR</rejectedACKCode>
+              <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+              <msh15ACKAccept>false</msh15ACKAccept>
+              <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+            </responseGenerationProperties>
+            <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+              <successfulACKCode>AA,CA</successfulACKCode>
+              <errorACKCode>AE,CE</errorACKCode>
+              <rejectedACKCode>AR,CR</rejectedACKCode>
+              <validateMessageControlId>true</validateMessageControlId>
+              <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+              <originalIdMapVariable></originalIdMapVariable>
+            </responseValidationProperties>
+          </inboundProperties>
+          <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+            <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+              <handleRepetitions>true</handleRepetitions>
+              <handleSubcomponents>true</handleSubcomponents>
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <stripNamespaces>false</stripNamespaces>
+              <segmentDelimiter>\r</segmentDelimiter>
+              <convertLineBreaks>true</convertLineBreaks>
+            </serializationProperties>
+            <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+              <useStrictParser>false</useStrictParser>
+              <useStrictValidation>false</useStrictValidation>
+              <segmentDelimiter>\r</segmentDelimiter>
+            </deserializationProperties>
+            <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+              <splitType>MSH_Segment</splitType>
+              <batchScript></batchScript>
+            </batchProperties>
+            <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+              <segmentDelimiter>\r</segmentDelimiter>
+              <successfulACKCode>AA</successfulACKCode>
+              <successfulACKMessage></successfulACKMessage>
+              <errorACKCode>AE</errorACKCode>
+              <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+              <rejectedACKCode>AR</rejectedACKCode>
+              <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+              <msh15ACKAccept>false</msh15ACKAccept>
+              <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+            </responseGenerationProperties>
+            <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+              <successfulACKCode>AA,CA</successfulACKCode>
+              <errorACKCode>AE,CE</errorACKCode>
+              <rejectedACKCode>AR,CR</rejectedACKCode>
+              <validateMessageControlId>true</validateMessageControlId>
+              <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+              <originalIdMapVariable></originalIdMapVariable>
+            </responseValidationProperties>
+          </outboundProperties>
+        </transformer>
+        <filter version="4.5.2">
+          <elements/>
+        </filter>
+        <transportName>Channel Reader</transportName>
+        <mode>SOURCE</mode>
+        <enabled>true</enabled>
+        <waitForPrevious>true</waitForPrevious>
+      </sourceConnector>
+      <destinationConnectors>
+        <connector version="4.5.2">
+          <metaDataId>1</metaDataId>
+          <name>To Microsoft Calender</name>
+          <properties class="com.mirth.connect.connectors.js.JavaScriptDispatcherProperties" version="4.5.2">
+            <pluginProperties/>
+            <destinationConnectorProperties version="4.5.2">
+              <queueEnabled>false</queueEnabled>
+              <sendFirst>false</sendFirst>
+              <retryIntervalMillis>10000</retryIntervalMillis>
+              <regenerateTemplate>false</regenerateTemplate>
+              <retryCount>0</retryCount>
+              <rotate>false</rotate>
+              <includeFilterTransformer>false</includeFilterTransformer>
+              <threadCount>1</threadCount>
+              <threadAssignmentVariable></threadAssignmentVariable>
+              <validateResponse>false</validateResponse>
+              <resourceIds class="linked-hash-map">
+                <entry>
+                  <string>Default Resource</string>
+                  <string>[Default Resource]</string>
+                </entry>
+              </resourceIds>
+              <queueBufferSize>1000</queueBufferSize>
+              <reattachAttachments>true</reattachAttachments>
+            </destinationConnectorProperties>
+            <script>var eventId = &quot;&quot;;
+// 🔥 Replace with your actual values from Azure App Registration
+var clientId = configurationMap.get(&apos;office_client_id&apos;);
+var clientSecret = configurationMap.get(&apos;office_secret_value&apos;);  // 🔑 Created in Azure
+var tenantId = configurationMap.get(&apos;tennant&apos;);  // 🔹 Found in Azure Directory Info
+
+var accessToken = getMicrosoftAccessToken(clientId, clientSecret, tenantId);
+
+var userId = getMicrosoftUserId(accessToken, $(&apos;OUTLOOK_EMAIL_PROVIDER&apos;)); 
+var messageTrasnactionId = $(&apos;TRANSACTION_ID&apos;);
+
+/**** CREATE EVENT ****/
+var event = {
+   subject: &quot;Meeting with Team 2&quot;,
+   start: { dateTime: &quot;2025-03-10T14:00:00&quot;, timeZone: &quot;UTC&quot; },
+   end: { dateTime: &quot;2025-03-10T15:00:00&quot;, timeZone: &quot;UTC&quot; },
+   attendees: [{ emailAddress: { address: &quot;someone@example.com&quot;, name: &quot;John Doe&quot; }, type: &quot;required&quot; }],
+   body: { content: &quot;Initial event created via Mirth.&quot;, contentType: &quot;text&quot; },
+   categories: [
+     messageTrasnactionId
+  ]
+};
+
+
+var eventId = createMicrosoftCalendarEvent(accessToken, userId, $(&apos;EVENT&apos;));</script>
+          </properties>
+          <transformer version="4.5.2">
+            <elements/>
+            <inboundDataType>HL7V2</inboundDataType>
+            <outboundDataType>HL7V2</outboundDataType>
+            <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </inboundProperties>
+            <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </outboundProperties>
+          </transformer>
+          <responseTransformer version="4.5.2">
+            <elements/>
+            <inboundDataType>HL7V2</inboundDataType>
+            <outboundDataType>HL7V2</outboundDataType>
+            <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </inboundProperties>
+            <outboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.5.2">
+              <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.5.2">
+                <handleRepetitions>true</handleRepetitions>
+                <handleSubcomponents>true</handleSubcomponents>
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <stripNamespaces>false</stripNamespaces>
+                <segmentDelimiter>\r</segmentDelimiter>
+                <convertLineBreaks>true</convertLineBreaks>
+              </serializationProperties>
+              <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.5.2">
+                <useStrictParser>false</useStrictParser>
+                <useStrictValidation>false</useStrictValidation>
+                <segmentDelimiter>\r</segmentDelimiter>
+              </deserializationProperties>
+              <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.5.2">
+                <splitType>MSH_Segment</splitType>
+                <batchScript></batchScript>
+              </batchProperties>
+              <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.5.2">
+                <segmentDelimiter>\r</segmentDelimiter>
+                <successfulACKCode>AA</successfulACKCode>
+                <successfulACKMessage></successfulACKMessage>
+                <errorACKCode>AE</errorACKCode>
+                <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+                <rejectedACKCode>AR</rejectedACKCode>
+                <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+                <msh15ACKAccept>false</msh15ACKAccept>
+                <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+              </responseGenerationProperties>
+              <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.5.2">
+                <successfulACKCode>AA,CA</successfulACKCode>
+                <errorACKCode>AE,CE</errorACKCode>
+                <rejectedACKCode>AR,CR</rejectedACKCode>
+                <validateMessageControlId>true</validateMessageControlId>
+                <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+                <originalIdMapVariable></originalIdMapVariable>
+              </responseValidationProperties>
+            </outboundProperties>
+          </responseTransformer>
+          <filter version="4.5.2">
+            <elements/>
+          </filter>
+          <transportName>JavaScript Writer</transportName>
+          <mode>DESTINATION</mode>
+          <enabled>true</enabled>
+          <waitForPrevious>true</waitForPrevious>
+        </connector>
+      </destinationConnectors>
+      <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+      <postprocessingScript>// This script executes once after a message has been processed
+// Responses returned from here will be stored as &quot;Postprocessor&quot; in the response map
+return;</postprocessingScript>
+      <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+      <undeployScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</undeployScript>
+      <properties version="4.5.2">
+        <clearGlobalChannelMap>true</clearGlobalChannelMap>
+        <messageStorageMode>DEVELOPMENT</messageStorageMode>
+        <encryptData>false</encryptData>
+        <encryptAttachments>false</encryptAttachments>
+        <encryptCustomMetaData>false</encryptCustomMetaData>
+        <removeContentOnCompletion>false</removeContentOnCompletion>
+        <removeOnlyFilteredOnCompletion>false</removeOnlyFilteredOnCompletion>
+        <removeAttachmentsOnCompletion>false</removeAttachmentsOnCompletion>
+        <initialState>STARTED</initialState>
+        <storeAttachments>true</storeAttachments>
+        <metaDataColumns>
+          <metaDataColumn>
+            <name>SOURCE</name>
+            <type>STRING</type>
+            <mappingName>mirth_source</mappingName>
+          </metaDataColumn>
+          <metaDataColumn>
+            <name>TYPE</name>
+            <type>STRING</type>
+            <mappingName>mirth_type</mappingName>
+          </metaDataColumn>
+        </metaDataColumns>
+        <attachmentProperties version="4.5.2">
+          <type>None</type>
+          <properties/>
+        </attachmentProperties>
+        <resourceIds class="linked-hash-map">
+          <entry>
+            <string>Default Resource</string>
+            <string>[Default Resource]</string>
+          </entry>
+        </resourceIds>
+      </properties>
+      <exportData>
+        <metadata>
+          <enabled>true</enabled>
+          <lastModified>
+            <time>1741650491719</time>
+            <timezone>America/Chicago</timezone>
+          </lastModified>
+          <pruningSettings>
+            <archiveEnabled>true</archiveEnabled>
+            <pruneErroredMessages>false</pruneErroredMessages>
+          </pruningSettings>
+          <userId>1</userId>
+        </metadata>
+        <codeTemplateLibraries>
+          <codeTemplateLibrary version="4.5.2">
+            <id>86fefdf1-c61b-4567-a0aa-ee620ab853bc</id>
+            <name>Outlook</name>
+            <revision>12</revision>
+            <lastModified>
+              <time>1741643353791</time>
+              <timezone>America/Chicago</timezone>
+            </lastModified>
+            <description></description>
+            <includeNewChannels>false</includeNewChannels>
+            <enabledChannelIds>
+              <string>6a457f11-74d8-46e3-a24f-546ac889d654</string>
+              <string>c90c8324-aaee-417b-b975-af073b48a11d</string>
+              <string>a861e5b5-d528-41e6-abae-8ebdbcfc2e05</string>
+            </enabledChannelIds>
+            <disabledChannelIds>
+              <string>848ffa6d-b09f-41b3-9815-224bb3838446</string>
+              <string>62d31a3f-45a9-4fa4-afa3-16110eb6a948</string>
+              <string>248713d0-fae1-4260-8976-28015cf67f22</string>
+            </disabledChannelIds>
+            <codeTemplates>
+              <codeTemplate version="4.5.2">
+                <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
+                <name>createMicrosoftCalendarEvent</name>
+                <revision>4</revision>
+                <lastModified>
+                  <time>1741650440307</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg2 description
+	@param {String} event - arg3 description
+	
+	@return {String} return eventId
+*/
+function createMicrosoftCalendarEvent(accessToken, userId, event) {
+//	logger.info(&quot;In createEvent&quot;);
+//	logger.info(&quot;*****************************************************************************************************&quot;);
+    if (!accessToken || accessToken.trim() === &quot;&quot;) {
+        logger.error(&quot;❌ Access token is missing or empty!&quot;);
+        return null;
+    }
+
+    if (!userId) {
+        logger.error(&quot;❌ Cannot create event without a valid user ID.&quot;);
+        return null;
+    }
+
+    var calendarUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events&quot;;
+
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+    var StringEntity = Packages.org.apache.http.entity.StringEntity;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpPost = new HttpPost(calendarUrl);
+
+        // 🔹 Trim Access Token and Set Headers
+        var cleanToken = accessToken.trim();
+        httpPost.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + cleanToken);
+        httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+        httpPost.setEntity(new StringEntity(JSON.stringify(event), &quot;UTF-8&quot;));
+
+        // ✅ Log Debug Info Before Sending
+//        logger.info(&quot;📌 Sending Request to: &quot; + calendarUrl);
+//        logger.info(&quot;🔑 Authorization Header: Bearer &quot; + cleanToken);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(event, null, 2));
+
+        var response = httpClient.execute(httpPost);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+        
+//        logger.info(&quot;RESPONSE CREATE::&quot; + responseString);
+
+        if (responseJson.id) {
+            var eventId = responseJson.id;
+//            logger.info(&quot;✅ Event Created Successfully!&quot;);
+//            logger.info(&quot;🔹 Event ID: &quot; + eventId);
+//            logger.info(&quot;🔹 Web Link: &quot; + responseJson.webLink);
+            return eventId;
+        } else {
+            logger.error(&quot;❌ Error: Event ID not found.&quot;);
+            logger.error(&quot;🔍 Full Response: &quot; + responseString);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
+                <name>deleteMicrosoftCalendarEvent</name>
+                <revision>4</revision>
+                <lastModified>
+                  <time>1741650440313</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - accessToken description
+	@param {String} userId - userId description
+	@param {String} eventId - eventId description
+	
+	@return {String} return description
+*/
+function deleteMicrosoftCalendarEvent(accessToken, userId, eventId) {
+    if (!accessToken || !userId || !eventId) {
+        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
+        return;
+    }
+
+    var deleteUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpDelete = Packages.org.apache.http.client.methods.HttpDelete;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpDelete = new HttpDelete(deleteUrl);
+
+        httpDelete.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
+        httpDelete.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+//        logger.info(&quot;📌 Sending DELETE request to: &quot; + deleteUrl);
+
+        var response = httpClient.execute(httpDelete);
+        var statusCode = response.getStatusLine().getStatusCode();
+
+        if (statusCode === 204) {
+            logger.info(&quot;✅ Event Deleted Successfully!&quot;);
+        } else {
+            var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+            logger.error(&quot;❌ Error Deleting Event: &quot; + responseString);
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while deleting: &quot; + e);
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
+                <name>findMicrosfotCalendarEventByCustomTransactionId</name>
+                <revision>5</revision>
+                <lastModified>
+                  <time>1741650440317</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg1 description
+	@param {String} transactionId - arg1 description
+	
+	@return {String} return description
+*/
+function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, transactionId) {
+
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+	
+    var filterQuery = &quot;categories/any(a:a eq &apos;&quot; + transactionId + &quot;&apos;)&quot;;
+    var encodedFilterQuery = encodeURIComponent(filterQuery); // Encode the whole filter query
+
+    var searchUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; 
+        + encodeURIComponent(userId) 
+        + &quot;/events?$filter=&quot; + encodedFilterQuery; // ✅ Use encoded filter
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpGet = Packages.org.apache.http.client.methods.HttpGet;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpGet = new HttpGet(searchUrl);
+        httpGet.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken);
+        httpGet.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+        var response = httpClient.execute(httpGet);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+
+        // 🔍 Log the full response for debugging
+//        logger.info(&quot;🔍 FULL RESPONSE: &quot; + responseString);
+
+        if (responseJson.value &amp;&amp; responseJson.value.length &gt; 0) {
+            var eventId = responseJson.value[0].id;
+//            logger.info(&quot;✅ Event Found! ID: &quot; + eventId);
+            return eventId;
+        } else {
+            logger.error(&quot;❌ No matching event found.&quot;);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while retrieving Event ID: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
+                <name>getMicrosoftAccessToken</name>
+                <revision>8</revision>
+                <lastModified>
+                  <time>1741642270815</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} clientId - arg1 description
+	@param {String} clientId - arg1 description
+	@param {String} clientId - arg1 description
+	
+	@return {String} return access token for oauth2
+*/
+
+function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
+
+	var scope = &quot;https://graph.microsoft.com/.default&quot;;  // 🔹 Graph API scope
+
+	// Microsoft OAuth 2.0 Token URL
+	var tokenUrl = &quot;https://login.microsoftonline.com/&quot; + tenantId + &quot;/oauth2/v2.0/token&quot;; 
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+	
+	try {
+	   var httpClient = HttpClients.createDefault();
+	   var httpPost = new HttpPost(tokenUrl);
+	   httpPost.setHeader(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded&quot;);
+	
+	   // 🔥 Request body for client credentials grant
+	   var postData = &quot;client_id=&quot; + encodeURIComponent(clientId) +
+	                  &quot;&amp;client_secret=&quot; + encodeURIComponent(clientSecret) +
+	                  &quot;&amp;scope=&quot; + encodeURIComponent(scope) +
+	                  &quot;&amp;grant_type=client_credentials&quot;;
+	
+	   httpPost.setEntity(new StringEntity(postData, &quot;UTF-8&quot;));
+	
+	   var response = httpClient.execute(httpPost);
+	   var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+	   var responseJson = JSON.parse(responseString);
+//	   logger.info(&quot;response: &quot; + responseString);
+	   if (responseJson.access_token) {
+//	       logger.info(&quot;✅ Access Token Received: &quot; + responseJson.access_token);
+	       return responseJson.access_token;
+	   } else {
+	       logger.error(&quot;❌ Error getting access token: &quot; + responseString);
+	       return null;
+	   }
+	} catch (e) {
+	   logger.error(&quot;❌ Exception: &quot; + e);
+	   return null;
+	}
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>e690620f-688c-46d8-adc0-85da23af2119</id>
+                <name>getMicrosoftUserId</name>
+                <revision>3</revision>
+                <lastModified>
+                  <time>1741639012305</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} arg1 - arg1 description
+	@return {String} return description
+*/
+function getMicrosoftUserId(accessToken, userEmail) {
+
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+	
+    var URLEncoder = Packages.java.net.URLEncoder;
+    var charset = &quot;UTF-8&quot;;
+
+    // 🔹 Correctly encode the query parameter
+    var encodedFilter = URLEncoder.encode(&quot;mail eq &apos;&quot; + userEmail + &quot;&apos;&quot;, charset);
+    var userLookupUrl = &quot;https://graph.microsoft.com/v1.0/users?$filter=&quot; + encodedFilter;
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpGet = Packages.org.apache.http.client.methods.HttpGet;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpGet = new HttpGet(userLookupUrl);
+        httpGet.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken);
+        httpGet.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+        var response = httpClient.execute(httpGet);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+        var responseJson = JSON.parse(responseString);
+
+        // 🔹 Check if the user exists in the response
+        if (responseJson.value &amp;&amp; responseJson.value.length &gt; 0) {
+            var userId = responseJson.value[0].id;
+//            logger.info(&quot;✅ User ID Retrieved: &quot; + userId);
+            return userId;
+        } else {
+            logger.error(&quot;❌ User not found in directory: &quot; + responseString);
+            return null;
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while getting User ID: &quot; + e);
+        return null;
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+              <codeTemplate version="4.5.2">
+                <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
+                <name>updateMicrosoftCalendarEvent</name>
+                <revision>5</revision>
+                <lastModified>
+                  <time>1741650440324</time>
+                  <timezone>America/Chicago</timezone>
+                </lastModified>
+                <contextSet>
+                  <delegate>
+                    <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                    <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                    <contextType>SOURCE_RECEIVER</contextType>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                    <contextType>DESTINATION_DISPATCHER</contextType>
+                  </delegate>
+                </contextSet>
+                <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+                  <type>FUNCTION</type>
+                  <code>/**
+	Modify the description here. Modify the function name and parameters as needed. One function per
+	template is recommended; create a new code template for each new function.
+
+	@param {String} accessToken - arg1 description
+	@param {String} userId - arg1 description
+	@param {String} eventId - arg1 description
+	@param {String} updatedEventData - arg1 description
+	
+	@return {String} return description
+*/
+function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEventData) {
+
+	// Import Apache HttpClient classes
+	var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+	var HttpPost = Packages.org.apache.http.client.methods.HttpPost;
+	var StringEntity = Packages.org.apache.http.entity.StringEntity;
+	var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+	
+    if (!accessToken || !userId || !eventId) {
+        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
+        return;
+    }
+
+    var updateUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
+
+    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
+    var HttpPatch = Packages.org.apache.http.client.methods.HttpPatch;
+    var StringEntity = Packages.org.apache.http.entity.StringEntity;
+    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
+
+    try {
+        var httpClient = HttpClients.createDefault();
+        var httpPatch = new HttpPatch(updateUrl);
+
+        httpPatch.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
+        httpPatch.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+        httpPatch.setEntity(new StringEntity(JSON.stringify(updatedEventData), &quot;UTF-8&quot;));
+
+//        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
+
+        var response = httpClient.execute(httpPatch);
+        var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+
+        if (response.getStatusLine().getStatusCode() === 200) {
+            logger.info(&quot;✅ Event Updated Successfully!&quot;);
+        } else {
+            logger.error(&quot;❌ Error Updating Event: &quot; + responseString);
+        }
+    } catch (e) {
+        logger.error(&quot;❌ Exception while updating: &quot; + e);
+    }
+}</code>
+                </properties>
+              </codeTemplate>
+            </codeTemplates>
+          </codeTemplateLibrary>
+        </codeTemplateLibraries>
+      </exportData>
+    </channel>
+  </channels>
+</channelGroup>
