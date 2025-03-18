@@ -2,6 +2,7 @@
 
 ## ⚠️ **DISCLAIMER – USE AT YOUR OWN RISK**
 🚨 **This software is provided "as is", without warranty of any kind.**  
+🚨 **The advice is "as is", without warranty of any kind.**  
 📌 **You assume all risks related to using this code, including but not limited to data loss, security vulnerabilities, and unexpected behavior.**  
 📌 **This project does NOT guarantee HIPAA compliance or any legal protections.**  
 📌 **Test thoroughly before production and modify as needed.**  
@@ -15,9 +16,10 @@
 
 ## 📌 Features
 ✅ **Creates, Updates, and Deletes Calendar Events** in **Microsoft Outlook**  
-✅ **Finds Events using Transaction ID (`SCH-1`)** stored in `categories[]`  
+✅ **Finds Events using Transaction ID (`SCH-1`)** **stored in `categories[]`**
+✅ **Finds Calendars for a user by Calendar Name.**
 ✅ **Stores Configuration in the Mirth Connect Configuration Map**  
-✅ **All calls should be using the prefix: https://graph.microsoft.com
+✅ **All calls should be using the prefix: https://graph.microsoft.com**
 
 ---
 
