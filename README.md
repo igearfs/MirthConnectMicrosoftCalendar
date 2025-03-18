@@ -17,6 +17,7 @@
 ✅ **Creates, Updates, and Deletes Calendar Events** in **Microsoft Outlook**  
 ✅ **Finds Events using Transaction ID (`SCH-1`)** stored in `categories[]`  
 ✅ **Stores Configuration in the Mirth Connect Configuration Map**  
+✅ **All calls should be using the prefix: https://graph.microsoft.com
 
 ---
 
@@ -63,6 +64,7 @@ We store the HL7 SCH-1 (Transaction ID) in categories[] in Microsoft Graph API.
 
 We retrieve the event using categories[].
 🔍 Search Request (Using Categories)
+"categories": ["TransactionId:EXC-43ER-32EGERG"]  <-- so this is your lookup in a caledar for a user.
 
 https://graph.microsoft.com/v1.0/users/{userId}/events?$filter=categories/any(a:a eq 'TransactionId:EXC-43ER-32EGERG')
 
@@ -74,6 +76,8 @@ If it changes, we will not find the event, unless we pass the event ID or use an
 
 /*** THIS NEEDS TO BE THE SAME ACROSS ALL SIU MESSAGES FOR THE SAME EVENT ***/
 var messageTransactionId = "TransactionId:" + msg['SCH']['SCH.1']['SCH.1.1'].toString();
+
+If that is in a different spot then assign it to yours.
 
 🚨 HL7 Fields Used for Scheduling
 
