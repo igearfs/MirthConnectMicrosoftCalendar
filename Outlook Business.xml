@@ -3,7 +3,7 @@
   <name>Outlook Business</name>
   <revision>1</revision>
   <lastModified>
-    <time>1742321171924</time>
+    <time>1742329147521</time>
     <timezone>America/Chicago</timezone>
   </lastModified>
   <description></description>
@@ -13,7 +13,7 @@
       <nextMetaDataId>2</nextMetaDataId>
       <name>outlook delete event</name>
       <description></description>
-      <revision>8</revision>
+      <revision>1</revision>
       <sourceConnector version="4.5.2">
         <metaDataId>0</metaDataId>
         <name>sourceConnector</name>
@@ -436,7 +436,7 @@ return;</undeployScript>
             <name>Outlook</name>
             <revision>2</revision>
             <lastModified>
-              <time>1742321756506</time>
+              <time>1742329269642</time>
               <timezone>America/Chicago</timezone>
             </lastModified>
             <description></description>
@@ -455,9 +455,9 @@ return;</undeployScript>
               <codeTemplate version="4.5.2">
                 <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
                 <name>createMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124960</time>
+                  <time>1742329146280</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -532,9 +532,9 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
               <codeTemplate version="4.5.2">
                 <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
                 <name>deleteMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124969</time>
+                  <time>1742329146286</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -646,9 +646,9 @@ function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) 
               <codeTemplate version="4.5.2">
                 <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
                 <name>findMicrosfotCalendarEventByCustomTransactionId</name>
-                <revision>3</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124980</time>
+                  <time>1742329146266</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -718,9 +718,9 @@ function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, tr
               <codeTemplate version="4.5.2">
                 <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
                 <name>getMicrosoftAccessToken</name>
-                <revision>7</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124989</time>
+                  <time>1742329146299</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -792,9 +792,9 @@ function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
               <codeTemplate version="4.5.2">
                 <id>abe6e758-cc3b-4343-bc37-067ab2fcaf8f</id>
                 <name>getMicrosoftCalendarIdByName</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742325424351</time>
+                  <time>1742329146292</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -859,9 +859,9 @@ function getMicrosoftCalendarIdByName(accessToken, userId, calendarName) {
               <codeTemplate version="4.5.2">
                 <id>e690620f-688c-46d8-adc0-85da23af2119</id>
                 <name>getMicrosoftUserId</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124998</time>
+                  <time>1742329146305</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -930,9 +930,9 @@ function getMicrosoftUserId(accessToken, userEmail) {
               <codeTemplate version="4.5.2">
                 <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
                 <name>updateMicrosoftCalendarEvent</name>
-                <revision>3</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742328125007</time>
+                  <time>1742329269648</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -983,8 +983,8 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
         httpPatch.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
         httpPatch.setEntity(new StringEntity(JSON.stringify(updatedEventData), &quot;UTF-8&quot;));
 
-        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
-        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
+//        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
 
         var response = httpClient.execute(httpPatch);
         var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
@@ -1012,7 +1012,7 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
       <nextMetaDataId>2</nextMetaDataId>
       <name>outlook update event</name>
       <description></description>
-      <revision>6</revision>
+      <revision>1</revision>
       <sourceConnector version="4.5.2">
         <metaDataId>0</metaDataId>
         <name>sourceConnector</name>
@@ -1460,7 +1460,7 @@ return;</undeployScript>
             <name>Outlook</name>
             <revision>2</revision>
             <lastModified>
-              <time>1742321756506</time>
+              <time>1742329269642</time>
               <timezone>America/Chicago</timezone>
             </lastModified>
             <description></description>
@@ -1479,9 +1479,9 @@ return;</undeployScript>
               <codeTemplate version="4.5.2">
                 <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
                 <name>createMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124960</time>
+                  <time>1742329146280</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -1556,9 +1556,9 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
               <codeTemplate version="4.5.2">
                 <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
                 <name>deleteMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124969</time>
+                  <time>1742329146286</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -1670,9 +1670,9 @@ function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) 
               <codeTemplate version="4.5.2">
                 <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
                 <name>findMicrosfotCalendarEventByCustomTransactionId</name>
-                <revision>3</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124980</time>
+                  <time>1742329146266</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -1742,9 +1742,9 @@ function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, tr
               <codeTemplate version="4.5.2">
                 <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
                 <name>getMicrosoftAccessToken</name>
-                <revision>7</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124989</time>
+                  <time>1742329146299</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -1816,9 +1816,9 @@ function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
               <codeTemplate version="4.5.2">
                 <id>abe6e758-cc3b-4343-bc37-067ab2fcaf8f</id>
                 <name>getMicrosoftCalendarIdByName</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742325424351</time>
+                  <time>1742329146292</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -1883,9 +1883,9 @@ function getMicrosoftCalendarIdByName(accessToken, userId, calendarName) {
               <codeTemplate version="4.5.2">
                 <id>e690620f-688c-46d8-adc0-85da23af2119</id>
                 <name>getMicrosoftUserId</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124998</time>
+                  <time>1742329146305</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -1954,9 +1954,9 @@ function getMicrosoftUserId(accessToken, userEmail) {
               <codeTemplate version="4.5.2">
                 <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
                 <name>updateMicrosoftCalendarEvent</name>
-                <revision>3</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742328125007</time>
+                  <time>1742329269648</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -2007,8 +2007,8 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
         httpPatch.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
         httpPatch.setEntity(new StringEntity(JSON.stringify(updatedEventData), &quot;UTF-8&quot;));
 
-        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
-        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
+//        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
 
         var response = httpClient.execute(httpPatch);
         var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
@@ -2036,7 +2036,7 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
       <nextMetaDataId>2</nextMetaDataId>
       <name>outlook create event</name>
       <description></description>
-      <revision>20</revision>
+      <revision>1</revision>
       <sourceConnector version="4.5.2">
         <metaDataId>0</metaDataId>
         <name>sourceConnector</name>
@@ -2491,7 +2491,7 @@ return;</undeployScript>
             <name>Outlook</name>
             <revision>2</revision>
             <lastModified>
-              <time>1742321756506</time>
+              <time>1742329269642</time>
               <timezone>America/Chicago</timezone>
             </lastModified>
             <description></description>
@@ -2510,9 +2510,9 @@ return;</undeployScript>
               <codeTemplate version="4.5.2">
                 <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
                 <name>createMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124960</time>
+                  <time>1742329146280</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -2587,9 +2587,9 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
               <codeTemplate version="4.5.2">
                 <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
                 <name>deleteMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124969</time>
+                  <time>1742329146286</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -2701,9 +2701,9 @@ function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) 
               <codeTemplate version="4.5.2">
                 <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
                 <name>findMicrosfotCalendarEventByCustomTransactionId</name>
-                <revision>3</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124980</time>
+                  <time>1742329146266</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -2773,9 +2773,9 @@ function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, tr
               <codeTemplate version="4.5.2">
                 <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
                 <name>getMicrosoftAccessToken</name>
-                <revision>7</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124989</time>
+                  <time>1742329146299</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -2847,9 +2847,9 @@ function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
               <codeTemplate version="4.5.2">
                 <id>abe6e758-cc3b-4343-bc37-067ab2fcaf8f</id>
                 <name>getMicrosoftCalendarIdByName</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742325424351</time>
+                  <time>1742329146292</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -2914,9 +2914,9 @@ function getMicrosoftCalendarIdByName(accessToken, userId, calendarName) {
               <codeTemplate version="4.5.2">
                 <id>e690620f-688c-46d8-adc0-85da23af2119</id>
                 <name>getMicrosoftUserId</name>
-                <revision>2</revision>
+                <revision>1</revision>
                 <lastModified>
-                  <time>1742328124998</time>
+                  <time>1742329146305</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -2985,9 +2985,9 @@ function getMicrosoftUserId(accessToken, userEmail) {
               <codeTemplate version="4.5.2">
                 <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
                 <name>updateMicrosoftCalendarEvent</name>
-                <revision>3</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742328125007</time>
+                  <time>1742329269648</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
@@ -3038,8 +3038,8 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
         httpPatch.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
         httpPatch.setEntity(new StringEntity(JSON.stringify(updatedEventData), &quot;UTF-8&quot;));
 
-        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
-        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
+//        logger.info(&quot;📌 Sending PATCH request to: &quot; + updateUrl);
+//        logger.info(&quot;📤 Request Body: &quot; + JSON.stringify(updatedEventData, null, 2));
 
         var response = httpClient.execute(httpPatch);
         var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
