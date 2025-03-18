@@ -4,7 +4,6 @@
 🚨 **This software is provided "as is", without warranty of any kind.**  
 🚨 **The advice is "as is", without warranty of any kind.**  
 📌 **You assume all risks related to using this code, including but not limited to data loss, security vulnerabilities, and unexpected behavior.**  
-📌 **This project does NOT guarantee HIPAA compliance or any legal protections.**  
 📌 **Test thoroughly before production and modify as needed.**  
 
 ---
