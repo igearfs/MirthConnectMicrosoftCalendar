@@ -35,7 +35,7 @@ Store credentials securely in **Mirth Connect → Settings → Configuration Map
 ## 📡 **2. HL7 SIU_S12 Message Example**
 ```hl7
 MSH|^~\&|MIRTH|SCHEDULER|HOSPITAL|HIS|20250310120000||SIU^S12|EXC-43ER-32EGERG|P|2.5.1
-SCH|EXC-43ER-32EGERG||||Meeting with Team 2|||20250310140000|20250310150000|60|MIN|Confirmed|||||
+SCH|EXC-43ER-32EGERG|||||Meeting with Team 2||20250310140000|20250310150000|60|MIN|Confirmed|||||
 PID|1||123456^^^HOSPITAL^MR||Doe^John||19800101|M|||123 Main St^^New York^NY^10001||555-1234|john.doe@example.com||||
 PV1|1|O|Clinic 1||||12345^Smith^Jane^^^^MD|||||||||||||||||||||||||||||||||20250310120000
 RGS|1|123456
