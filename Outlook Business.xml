@@ -3,7 +3,7 @@
   <name>Outlook Business</name>
   <revision>1</revision>
   <lastModified>
-    <time>1742329147521</time>
+    <time>1741650893165</time>
     <timezone>America/Chicago</timezone>
   </lastModified>
   <description></description>
@@ -13,7 +13,7 @@
       <nextMetaDataId>2</nextMetaDataId>
       <name>outlook delete event</name>
       <description></description>
-      <revision>1</revision>
+      <revision>5</revision>
       <sourceConnector version="4.5.2">
         <metaDataId>0</metaDataId>
         <name>sourceConnector</name>
@@ -45,17 +45,19 @@
 📌 **You assume all risks related to using this code, including but not limited to data loss, security vulnerabilities, and unexpected behavior.**  
 📌 **This project does NOT guarantee HIPAA compliance or any legal protections.**  
 📌 **Test thoroughly before production and modify as needed.** 
-📌 Licensed under GPL v3.
+
 **********************************************/
 
 /*** THIS NEEDS TO BE THE SAME ACROSS ALL SIU MESSAGES FOR THE UPDATE AND DELETE ***/
 
 var messageTrasnactionId = &quot;TransactionId:&quot; + msg[&apos;SCH&apos;][&apos;SCH.1&apos;][&apos;SCH.1.1&apos;].toString();
-
+var calendarName =  &quot;MirthConnect&quot;;
 var docEmailInOutlook = msg[&apos;NTE&apos;][&apos;NTE.3&apos;][&apos;NTE.3.1&apos;].toString().split(&quot;:&quot;)[1];
+
+
 channelMap.put(&quot;OUTLOOK_EMAIL_PROVIDER&quot;, docEmailInOutlook);
 channelMap.put(&quot;TRANSACTION_ID&quot;, messageTrasnactionId);
-channelMap.put(&quot;CALENDAR_NAME&quot;, &quot;MirthConnect&quot;);</script>
+channelMap.put(&quot;CALENDAR_NAME&quot;, calendarName);</script>
             </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
           </elements>
           <inboundTemplate encoding="base64"></inboundTemplate>
@@ -421,7 +423,7 @@ return;</undeployScript>
         <metadata>
           <enabled>true</enabled>
           <lastModified>
-            <time>1742328457086</time>
+            <time>1742436035130</time>
             <timezone>America/Chicago</timezone>
           </lastModified>
           <pruningSettings>
@@ -434,9 +436,9 @@ return;</undeployScript>
           <codeTemplateLibrary version="4.5.2">
             <id>86fefdf1-c61b-4567-a0aa-ee620ab853bc</id>
             <name>Outlook</name>
-            <revision>2</revision>
+            <revision>5</revision>
             <lastModified>
-              <time>1742329269642</time>
+              <time>1742436825392</time>
               <timezone>America/Chicago</timezone>
             </lastModified>
             <description></description>
@@ -455,18 +457,18 @@ return;</undeployScript>
               <codeTemplate version="4.5.2">
                 <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
                 <name>createMicrosoftCalendarEvent</name>
-                <revision>1</revision>
+                <revision>6</revision>
                 <lastModified>
-                  <time>1742329146280</time>
+                  <time>1742437074445</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -515,6 +517,7 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
         var responseJson = JSON.parse(responseString);
         
         if (responseJson.id) {
+        	  logger.info(&quot;Event Created&quot;);
             return responseJson.id;
         } else {
             logger.error(&quot;❌ Error: Event ID not found.&quot;);
@@ -532,18 +535,18 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
               <codeTemplate version="4.5.2">
                 <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
                 <name>deleteMicrosoftCalendarEvent</name>
-                <revision>1</revision>
+                <revision>4</revision>
                 <lastModified>
-                  <time>1742329146286</time>
+                  <time>1742436825399</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -596,68 +599,24 @@ function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) 
         logger.error(&quot;❌ Exception while deleting: &quot; + e);
     }
 }
-
-
-///**
-//	Deletes an event.
-//
-//	@param {String} accessToken - accessToken description
-//	@param {String} userId - userId description
-//	@param {String} eventId - eventId description
-//	
-//	@return {String} return description
-//*/
-//function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) {
-//    if (!accessToken || !userId || !eventId) {
-//        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
-//        return;
-//    }
-//
-//    var deleteUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
-//
-//    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
-//    var HttpDelete = Packages.org.apache.http.client.methods.HttpDelete;
-//    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
-//
-//    try {
-//        var httpClient = HttpClients.createDefault();
-//        var httpDelete = new HttpDelete(deleteUrl);
-//
-//        httpDelete.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
-//        httpDelete.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
-//
-////        logger.info(&quot;📌 Sending DELETE request to: &quot; + deleteUrl);
-//
-//        var response = httpClient.execute(httpDelete);
-//        var statusCode = response.getStatusLine().getStatusCode();
-//
-//        if (statusCode === 204) {
-//            logger.info(&quot;✅ Event Deleted Successfully!&quot;);
-//        } else {
-//            var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
-//            logger.error(&quot;❌ Error Deleting Event: &quot; + responseString);
-//        }
-//    } catch (e) {
-//        logger.error(&quot;❌ Exception while deleting: &quot; + e);
-//    }
-//}</code>
+</code>
                 </properties>
               </codeTemplate>
               <codeTemplate version="4.5.2">
                 <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
                 <name>findMicrosfotCalendarEventByCustomTransactionId</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146266</time>
+                  <time>1742434271421</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -718,18 +677,18 @@ function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, tr
               <codeTemplate version="4.5.2">
                 <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
                 <name>getMicrosoftAccessToken</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146299</time>
+                  <time>1742434271504</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -792,18 +751,18 @@ function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
               <codeTemplate version="4.5.2">
                 <id>abe6e758-cc3b-4343-bc37-067ab2fcaf8f</id>
                 <name>getMicrosoftCalendarIdByName</name>
-                <revision>1</revision>
+                <revision>3</revision>
                 <lastModified>
-                  <time>1742329146292</time>
+                  <time>1742434271492</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -859,18 +818,18 @@ function getMicrosoftCalendarIdByName(accessToken, userId, calendarName) {
               <codeTemplate version="4.5.2">
                 <id>e690620f-688c-46d8-adc0-85da23af2119</id>
                 <name>getMicrosoftUserId</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146305</time>
+                  <time>1742434271515</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -930,18 +889,18 @@ function getMicrosoftUserId(accessToken, userEmail) {
               <codeTemplate version="4.5.2">
                 <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
                 <name>updateMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>3</revision>
                 <lastModified>
-                  <time>1742329269648</time>
+                  <time>1742434271445</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1012,7 +971,7 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
       <nextMetaDataId>2</nextMetaDataId>
       <name>outlook update event</name>
       <description></description>
-      <revision>1</revision>
+      <revision>6</revision>
       <sourceConnector version="4.5.2">
         <metaDataId>0</metaDataId>
         <name>sourceConnector</name>
@@ -1044,7 +1003,7 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
 📌 **You assume all risks related to using this code, including but not limited to data loss, security vulnerabilities, and unexpected behavior.**  
 📌 **This project does NOT guarantee HIPAA compliance or any legal protections.**  
 📌 **Test thoroughly before production and modify as needed.** 
-📌 Licensed under GPL v3.
+
 **********************************************/
 
 /*** THIS NEEDS TO BE THE SAME ACROSS ALL SIU MESSAGES FOR THE UPDATE AND DELETE ***/
@@ -1054,16 +1013,17 @@ var messageTrasnactionId = &quot;TransactionId:&quot; + msg[&apos;SCH&apos;][&ap
 /*** OTHER INFO *****/
 var patientEmail = msg[&apos;PID&apos;][&apos;PID.14&apos;][&apos;PID.14.1&apos;].toString();
 var patientName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString() + &quot; &quot; + msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString();
-var calenderSubject =  msg[&apos;SCH&apos;][&apos;SCH.6&apos;][&apos;SCH.6.1&apos;].toString();
+var calendarSubject =  msg[&apos;SCH&apos;][&apos;SCH.6&apos;][&apos;SCH.6.1&apos;].toString();
+var calendarName =  &quot;MirthConnect&quot;;
 
 /*** YES I AM CHEATING AND HARDCODING THESE VALUES ****/
 var startDate = &quot;2025-03-10T15:00:00&quot;;
 var endDate = &quot;2025-03-10T16:00:00&quot;;
 var visitReason = &quot;This event was updated via Mirth Connect!&quot;;
 
-/**** CREATE EVENT ****/
+/**** UPDATE EVENT ****/
 var updatedEventData = {
-   subject: calenderSubject,
+   subject: calendarSubject,
    start: { dateTime: startDate, timeZone: &quot;UTC&quot; },
    end: { dateTime: endDate, timeZone: &quot;UTC&quot; },
    attendees: [{ emailAddress: { address: patientEmail, name: patientName }, type: &quot;required&quot; }],
@@ -1079,7 +1039,7 @@ var docEmailInOutlook = msg[&apos;NTE&apos;][&apos;NTE.3&apos;][&apos;NTE.3.1&ap
 channelMap.put(&quot;OUTLOOK_EMAIL_PROVIDER&quot;, docEmailInOutlook);
 channelMap.put(&quot;TRANSACTION_ID&quot;, messageTrasnactionId);
 channelMap.put(&quot;EVENT&quot;, updatedEventData);
-channelMap.put(&quot;CALENDAR_NAME&quot;, &quot;MirthConnect&quot;);</script>
+channelMap.put(&quot;CALENDAR_NAME&quot;, calendarName);</script>
             </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
           </elements>
           <inboundTemplate encoding="base64"></inboundTemplate>
@@ -1445,7 +1405,7 @@ return;</undeployScript>
         <metadata>
           <enabled>true</enabled>
           <lastModified>
-            <time>1742324668255</time>
+            <time>1742435132509</time>
             <timezone>America/Chicago</timezone>
           </lastModified>
           <pruningSettings>
@@ -1458,9 +1418,9 @@ return;</undeployScript>
           <codeTemplateLibrary version="4.5.2">
             <id>86fefdf1-c61b-4567-a0aa-ee620ab853bc</id>
             <name>Outlook</name>
-            <revision>2</revision>
+            <revision>5</revision>
             <lastModified>
-              <time>1742329269642</time>
+              <time>1742436825392</time>
               <timezone>America/Chicago</timezone>
             </lastModified>
             <description></description>
@@ -1479,18 +1439,18 @@ return;</undeployScript>
               <codeTemplate version="4.5.2">
                 <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
                 <name>createMicrosoftCalendarEvent</name>
-                <revision>1</revision>
+                <revision>6</revision>
                 <lastModified>
-                  <time>1742329146280</time>
+                  <time>1742437074445</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1539,6 +1499,7 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
         var responseJson = JSON.parse(responseString);
         
         if (responseJson.id) {
+        	  logger.info(&quot;Event Created&quot;);
             return responseJson.id;
         } else {
             logger.error(&quot;❌ Error: Event ID not found.&quot;);
@@ -1556,18 +1517,18 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
               <codeTemplate version="4.5.2">
                 <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
                 <name>deleteMicrosoftCalendarEvent</name>
-                <revision>1</revision>
+                <revision>4</revision>
                 <lastModified>
-                  <time>1742329146286</time>
+                  <time>1742436825399</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1620,68 +1581,24 @@ function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) 
         logger.error(&quot;❌ Exception while deleting: &quot; + e);
     }
 }
-
-
-///**
-//	Deletes an event.
-//
-//	@param {String} accessToken - accessToken description
-//	@param {String} userId - userId description
-//	@param {String} eventId - eventId description
-//	
-//	@return {String} return description
-//*/
-//function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) {
-//    if (!accessToken || !userId || !eventId) {
-//        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
-//        return;
-//    }
-//
-//    var deleteUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
-//
-//    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
-//    var HttpDelete = Packages.org.apache.http.client.methods.HttpDelete;
-//    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
-//
-//    try {
-//        var httpClient = HttpClients.createDefault();
-//        var httpDelete = new HttpDelete(deleteUrl);
-//
-//        httpDelete.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
-//        httpDelete.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
-//
-////        logger.info(&quot;📌 Sending DELETE request to: &quot; + deleteUrl);
-//
-//        var response = httpClient.execute(httpDelete);
-//        var statusCode = response.getStatusLine().getStatusCode();
-//
-//        if (statusCode === 204) {
-//            logger.info(&quot;✅ Event Deleted Successfully!&quot;);
-//        } else {
-//            var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
-//            logger.error(&quot;❌ Error Deleting Event: &quot; + responseString);
-//        }
-//    } catch (e) {
-//        logger.error(&quot;❌ Exception while deleting: &quot; + e);
-//    }
-//}</code>
+</code>
                 </properties>
               </codeTemplate>
               <codeTemplate version="4.5.2">
                 <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
                 <name>findMicrosfotCalendarEventByCustomTransactionId</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146266</time>
+                  <time>1742434271421</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1742,18 +1659,18 @@ function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, tr
               <codeTemplate version="4.5.2">
                 <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
                 <name>getMicrosoftAccessToken</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146299</time>
+                  <time>1742434271504</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1816,18 +1733,18 @@ function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
               <codeTemplate version="4.5.2">
                 <id>abe6e758-cc3b-4343-bc37-067ab2fcaf8f</id>
                 <name>getMicrosoftCalendarIdByName</name>
-                <revision>1</revision>
+                <revision>3</revision>
                 <lastModified>
-                  <time>1742329146292</time>
+                  <time>1742434271492</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1883,18 +1800,18 @@ function getMicrosoftCalendarIdByName(accessToken, userId, calendarName) {
               <codeTemplate version="4.5.2">
                 <id>e690620f-688c-46d8-adc0-85da23af2119</id>
                 <name>getMicrosoftUserId</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146305</time>
+                  <time>1742434271515</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1954,18 +1871,18 @@ function getMicrosoftUserId(accessToken, userEmail) {
               <codeTemplate version="4.5.2">
                 <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
                 <name>updateMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>3</revision>
                 <lastModified>
-                  <time>1742329269648</time>
+                  <time>1742434271445</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -2036,7 +1953,7 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
       <nextMetaDataId>2</nextMetaDataId>
       <name>outlook create event</name>
       <description></description>
-      <revision>1</revision>
+      <revision>15</revision>
       <sourceConnector version="4.5.2">
         <metaDataId>0</metaDataId>
         <name>sourceConnector</name>
@@ -2068,7 +1985,7 @@ function updateMicrosoftCalendarEvent(accessToken, userId, eventId, updatedEvent
 📌 **You assume all risks related to using this code, including but not limited to data loss, security vulnerabilities, and unexpected behavior.**  
 📌 **This project does NOT guarantee HIPAA compliance or any legal protections.**  
 📌 **Test thoroughly before production and modify as needed.** 
-📌 Licensed under GPL v3.
+
 **********************************************/
 
 /*** THIS NEEDS TO BE THE SAME ACROSS ALL SIU MESSAGES FOR THE UPDATE AND DELETE ***/
@@ -2079,8 +1996,10 @@ var messageTrasnactionId = &quot;TransactionId:&quot; + msg[&apos;SCH&apos;][&ap
 var patientEmail = msg[&apos;PID&apos;][&apos;PID.14&apos;][&apos;PID.14.1&apos;].toString();
 var patientName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString() + &quot; &quot; + msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString();
 var calenderSubject =  msg[&apos;SCH&apos;][&apos;SCH.6&apos;][&apos;SCH.6.1&apos;].toString();
+var calendarName =  &quot;MirthConnect&quot;;
 
 /*** YES I AM CHEATING AND HARDCODING THESE VALUES ****/
+
 var startDate = &quot;2025-03-18T14:00:00&quot;;
 var endDate = &quot;2025-03-18T15:00:00&quot;;
 var visitReason = &quot;Some ingformation here&quot;;
@@ -2103,7 +2022,7 @@ var docEmailInOutlook = msg[&apos;NTE&apos;][&apos;NTE.3&apos;][&apos;NTE.3.1&ap
 channelMap.put(&quot;OUTLOOK_EMAIL_PROVIDER&quot;, docEmailInOutlook);
 channelMap.put(&quot;TRANSACTION_ID&quot;, messageTrasnactionId);
 channelMap.put(&quot;EVENT&quot;, event);
-channelMap.put(&quot;CALENDAR_NAME&quot;, &quot;MirthConnect&quot;);</script>
+channelMap.put(&quot;CALENDAR_NAME&quot;, calendarName);</script>
             </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
           </elements>
           <inboundTemplate encoding="base64">TVNIfF5+XCZ8TUlSVEh8U0NIRURVTEVSfEhPU1BJVEFMfEhJU3wyMDI1MDMxMDEyMDAwMHx8U0lVXlMxMnxFWEMtNDNFUi0zMkVHRVJHfFB8Mi41LjEKU0NIfDEyMzQ1NnxFWEMtNDNFUi0zMkVHRVJHfHx8fE1lZXRpbmcgd2l0aCBUZWFtIDJ8fHwyMDI1MDMxMDE0MDAwMHwyMDI1MDMxMDE1MDAwMHw2MHxNSU58Q29uZmlybWVkfHx8fHwKUElEfDF8fDEyMzQ1Nl5eXkhPU1BJVEFMXk1SfHxEb2VeSm9obnx8MTk4MDAxMDF8TXx8fDEyMyBNYWluIFN0Xl5OZXcgWW9ya15OWV4xMDAwMXx8NTU1LTEyMzR8am9obi5kb2VAZXhhbXBsZS5jb218fHx8ClBWMXwxfE98Q2xpbmljIDF8fHx8MTIzNDVeU21pdGheSmFuZV5eXl5NRHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fDIwMjUwMzEwMTIwMDAwClJHU3wxfDEyMzQ1NgpBSVN8MXx8MjAyNTAzMTAxNDAwMDB8NjB8TUlOfHx8RG9lXkpvaG4KQUlHfDF8fDEyMzQ1XlNtaXRoXkphbmVeXl5eTUR8fHx8fHx8fApOVEV8MXx8RG9jdG9yIEVtYWlsOiBqYW5lLnNtaXRoQGhvc3BpdGFsLmNvbQo=</inboundTemplate>
@@ -2236,19 +2155,6 @@ var messageTrasnactionId = $(&apos;TRANSACTION_ID&apos;);
 var calendarName = $(&apos;CALENDAR_NAME&apos;) + &apos;&apos;;
 
 var calendarId = getMicrosoftCalendarIdByName(accessToken, userId, calendarName);
-
-/**** CREATE EVENT ****/
-var event = {
-   subject: &quot;Meeting with Team 2&quot;,
-   start: { dateTime: &quot;2025-03-10T14:00:00&quot;, timeZone: &quot;UTC&quot; },
-   end: { dateTime: &quot;2025-03-10T15:00:00&quot;, timeZone: &quot;UTC&quot; },
-   attendees: [{ emailAddress: { address: &quot;someone@example.com&quot;, name: &quot;John Doe&quot; }, type: &quot;required&quot; }],
-   body: { content: &quot;Initial event created via Mirth.&quot;, contentType: &quot;text&quot; },
-   categories: [
-     messageTrasnactionId
-  ]
-};
-
 
 var eventId = createMicrosoftCalendarEvent(accessToken, userId, $(&apos;EVENT&apos;), calendarId);</script>
           </properties>
@@ -2476,7 +2382,7 @@ return;</undeployScript>
         <metadata>
           <enabled>true</enabled>
           <lastModified>
-            <time>1742325189082</time>
+            <time>1742436681203</time>
             <timezone>America/Chicago</timezone>
           </lastModified>
           <pruningSettings>
@@ -2489,9 +2395,9 @@ return;</undeployScript>
           <codeTemplateLibrary version="4.5.2">
             <id>86fefdf1-c61b-4567-a0aa-ee620ab853bc</id>
             <name>Outlook</name>
-            <revision>2</revision>
+            <revision>5</revision>
             <lastModified>
-              <time>1742329269642</time>
+              <time>1742436825392</time>
               <timezone>America/Chicago</timezone>
             </lastModified>
             <description></description>
@@ -2510,18 +2416,18 @@ return;</undeployScript>
               <codeTemplate version="4.5.2">
                 <id>f169f44b-e1ce-40ef-8a3e-7924b9f91e22</id>
                 <name>createMicrosoftCalendarEvent</name>
-                <revision>1</revision>
+                <revision>6</revision>
                 <lastModified>
-                  <time>1742329146280</time>
+                  <time>1742437074445</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -2570,6 +2476,7 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
         var responseJson = JSON.parse(responseString);
         
         if (responseJson.id) {
+        	  logger.info(&quot;Event Created&quot;);
             return responseJson.id;
         } else {
             logger.error(&quot;❌ Error: Event ID not found.&quot;);
@@ -2587,18 +2494,18 @@ function createMicrosoftCalendarEvent(accessToken, userId, event, calendarId) {
               <codeTemplate version="4.5.2">
                 <id>a0e23dfb-d744-4573-8930-5adef6f4b06d</id>
                 <name>deleteMicrosoftCalendarEvent</name>
-                <revision>1</revision>
+                <revision>4</revision>
                 <lastModified>
-                  <time>1742329146286</time>
+                  <time>1742436825399</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -2651,68 +2558,24 @@ function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) 
         logger.error(&quot;❌ Exception while deleting: &quot; + e);
     }
 }
-
-
-///**
-//	Deletes an event.
-//
-//	@param {String} accessToken - accessToken description
-//	@param {String} userId - userId description
-//	@param {String} eventId - eventId description
-//	
-//	@return {String} return description
-//*/
-//function deleteMicrosoftCalendarEvent(accessToken, userId, eventId, calendarId) {
-//    if (!accessToken || !userId || !eventId) {
-//        logger.error(&quot;❌ Missing required parameters: accessToken, userId, or eventId.&quot;);
-//        return;
-//    }
-//
-//    var deleteUrl = &quot;https://graph.microsoft.com/v1.0/users/&quot; + encodeURIComponent(userId) + &quot;/events/&quot; + encodeURIComponent(eventId);
-//
-//    var HttpClients = Packages.org.apache.http.impl.client.HttpClients;
-//    var HttpDelete = Packages.org.apache.http.client.methods.HttpDelete;
-//    var EntityUtils = Packages.org.apache.http.util.EntityUtils;
-//
-//    try {
-//        var httpClient = HttpClients.createDefault();
-//        var httpDelete = new HttpDelete(deleteUrl);
-//
-//        httpDelete.setHeader(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken.trim());
-//        httpDelete.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
-//
-////        logger.info(&quot;📌 Sending DELETE request to: &quot; + deleteUrl);
-//
-//        var response = httpClient.execute(httpDelete);
-//        var statusCode = response.getStatusLine().getStatusCode();
-//
-//        if (statusCode === 204) {
-//            logger.info(&quot;✅ Event Deleted Successfully!&quot;);
-//        } else {
-//            var responseString = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
-//            logger.error(&quot;❌ Error Deleting Event: &quot; + responseString);
-//        }
-//    } catch (e) {
-//        logger.error(&quot;❌ Exception while deleting: &quot; + e);
-//    }
-//}</code>
+</code>
                 </properties>
               </codeTemplate>
               <codeTemplate version="4.5.2">
                 <id>2c7dcb78-da69-4557-bd17-a7c3e4db114a</id>
                 <name>findMicrosfotCalendarEventByCustomTransactionId</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146266</time>
+                  <time>1742434271421</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -2773,18 +2636,18 @@ function findMicrosfotCalendarEventByCustomTransactionId(accessToken, userId, tr
               <codeTemplate version="4.5.2">
                 <id>fb3bc8a4-2762-4375-84df-955e44a0d1ad</id>
                 <name>getMicrosoftAccessToken</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146299</time>
+                  <time>1742434271504</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -2847,18 +2710,18 @@ function getMicrosoftAccessToken(clientId, clientSecret, tenantId) {
               <codeTemplate version="4.5.2">
                 <id>abe6e758-cc3b-4343-bc37-067ab2fcaf8f</id>
                 <name>getMicrosoftCalendarIdByName</name>
-                <revision>1</revision>
+                <revision>3</revision>
                 <lastModified>
-                  <time>1742329146292</time>
+                  <time>1742434271492</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -2914,18 +2777,18 @@ function getMicrosoftCalendarIdByName(accessToken, userId, calendarName) {
               <codeTemplate version="4.5.2">
                 <id>e690620f-688c-46d8-adc0-85da23af2119</id>
                 <name>getMicrosoftUserId</name>
-                <revision>1</revision>
+                <revision>2</revision>
                 <lastModified>
-                  <time>1742329146305</time>
+                  <time>1742434271515</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -2985,18 +2848,18 @@ function getMicrosoftUserId(accessToken, userEmail) {
               <codeTemplate version="4.5.2">
                 <id>2399a629-3fbd-4e91-a139-ddf1a782b2b5</id>
                 <name>updateMicrosoftCalendarEvent</name>
-                <revision>2</revision>
+                <revision>3</revision>
                 <lastModified>
-                  <time>1742329269648</time>
+                  <time>1742434271445</time>
                   <timezone>America/Chicago</timezone>
                 </lastModified>
                 <contextSet>
                   <delegate>
+                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                     <contextType>SOURCE_RECEIVER</contextType>
                     <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                     <contextType>DESTINATION_DISPATCHER</contextType>
                     <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                    <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
                   </delegate>
                 </contextSet>
                 <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
